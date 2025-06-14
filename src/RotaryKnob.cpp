@@ -1,9 +1,9 @@
 #include "RotaryKnob.h"
 
-RotaryKnob::RotaryKnob(const juce::String& text/*,
+RotaryKnob::RotaryKnob(const juce::String& text,
                        juce::AudioProcessorValueTreeState& apvts,
-                       const juce::ParameterID& parameterID*/)
-    //: attachment(apvts, parameterID.getParamID(), slider)
+                       const juce::ParameterID& parameterID)
+    : attachment(apvts, parameterID.getParamID(), slider)
 {
     slider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     slider.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);

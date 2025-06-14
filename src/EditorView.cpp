@@ -1,13 +1,38 @@
 #include "EditorView.h"
 
-EditorView::EditorView(AudioProcessor& p)
-    : keyboardComponent(p.keyboardState, MidiKeyboardComponent::horizontalKeyboard)
+EditorView::EditorView(AudioProcessor& p) :
+    audioProcessor(p),
+    keyboardComponent(p.keyboardState, MidiKeyboardComponent::horizontalKeyboard)
 {
     setOpaque(true);
+
+    addAndMakeVisible(fineTuningKnob);
+    addAndMakeVisible(randomDetuningKnob);
+    addAndMakeVisible(stretchTuningKnob);
+
+    addAndMakeVisible(envDecayKnob);
+    addAndMakeVisible(envReleaseKnob);
+    addAndMakeVisible(velocitySensitivityKnob);
+
+    addAndMakeVisible(hardnessKnob);
+    addAndMakeVisible(velocityToHardnessKnob);
+
+    addAndMakeVisible(mufflingFilterKnob);
+    addAndMakeVisible(velocityToMufflingKnob);
+
+    addChildComponent(tremoloKnob);
+    addChildComponent(autopanKnob);
+    addChildComponent(lfoRateKnob);
+
+    addAndMakeVisible(trebleBoostKnob);
+    addAndMakeVisible(overdriveKnob);
+    addAndMakeVisible(stereoWidthKnob);
 
     addAndMakeVisible(reverbSizeKnob);
     addAndMakeVisible(reverbDampKnob);
     addAndMakeVisible(reverbMixKnob);
+
+    addAndMakeVisible(outputLevelKnob);
 
     addAndMakeVisible(keyboardComponent);
 }
@@ -32,14 +57,15 @@ void EditorView::paint(juce::Graphics& g)
     g.setColour(Colors::accent1);
     g.drawSingleLineText("Piano", 166, 27);
 
-    drawGroup(g, "Tuning", 20, 100, 270);
-    drawGroup(g, "Envelope", 310, 100, 270);
-    drawGroup(g, "Hardness", 600, 100, 180);
-    drawGroup(g, "Out", 800, 100, 115);
+    drawGroup(g, "Tuning", 40, 110, 270);
+    drawGroup(g, "Envelope", 330, 110, 270);
+    drawGroup(g, "Piano", 620, 110, 270);
+    //drawGroup(g, "E-Piano", 620, 110, 270);
 
-    drawGroup(g, "Piano", 40, 200, 270);
-    drawGroup(g, "Reverb", 330, 200, 270);
-    drawGroup(g, "FX", 620, 200, 270);
+    drawGroup(g, "Hardness", 25, 300, 180);
+    drawGroup(g, "FX", 225, 300, 270);
+    drawGroup(g, "Reverb", 515, 300, 270);
+    drawGroup(g, "Out", 805, 300, 105);
 
     g.setColour(Colors::accent1);
     g.fillRect(0, defaultHeight - 84, defaultWidth, 4);
@@ -60,8 +86,8 @@ void EditorView::drawGroup(juce::Graphics& g, const juce::String& name, int x, i
     g.drawSingleLineText(name, x + offset, y + 22);
 
     g.setColour(Colors::text.withAlpha(0.5f));
-    g.fillRect(x, y + 14, offset - 5, 2);
-    g.fillRect(x + width - (offset - 5), y + 14, offset - 5, 2);
+    g.fillRect(x + 10, y + 14, offset - 15, 2);
+    g.fillRect(x + width - (offset - 5), y + 14, offset - 15, 2);
 
     //g.setColour(juce::Colours::yellow);
     //g.drawRect(x, y, width, 30);
@@ -69,9 +95,33 @@ void EditorView::drawGroup(juce::Graphics& g, const juce::String& name, int x, i
 
 void EditorView::resized()
 {
-    reverbSizeKnob.setTopLeftPosition(330, 235);
+    fineTuningKnob.setTopLeftPosition(40, 160);
+    randomDetuningKnob.setTopLeftPosition(fineTuningKnob.getRight(), fineTuningKnob.getY());
+    stretchTuningKnob.setTopLeftPosition(randomDetuningKnob.getRight(), randomDetuningKnob.getY());
+
+    envDecayKnob.setTopLeftPosition(330, 160);
+    envReleaseKnob.setTopLeftPosition(envDecayKnob.getRight(), envDecayKnob.getY());
+    velocitySensitivityKnob.setTopLeftPosition(envReleaseKnob.getRight(), envReleaseKnob.getY());
+
+    mufflingFilterKnob.setTopLeftPosition(665, 160);
+    velocityToMufflingKnob.setTopLeftPosition(mufflingFilterKnob.getRight(), mufflingFilterKnob.getY());
+
+    tremoloKnob.setTopLeftPosition(620, 160);
+    autopanKnob.setTopLeftPosition(tremoloKnob.getRight(), tremoloKnob.getY());
+    lfoRateKnob.setTopLeftPosition(autopanKnob.getRight(), autopanKnob.getY());
+
+    hardnessKnob.setTopLeftPosition(25, 350);
+    velocityToHardnessKnob.setTopLeftPosition(hardnessKnob.getRight(), hardnessKnob.getY());
+
+    trebleBoostKnob.setTopLeftPosition(225, 350);
+    overdriveKnob.setTopLeftPosition(trebleBoostKnob.getRight(), trebleBoostKnob.getY());
+    stereoWidthKnob.setTopLeftPosition(overdriveKnob.getRight(), overdriveKnob.getY());
+
+    reverbSizeKnob.setTopLeftPosition(515, 350);
     reverbDampKnob.setTopLeftPosition(reverbSizeKnob.getRight(), reverbSizeKnob.getY());
     reverbMixKnob.setTopLeftPosition(reverbDampKnob.getRight(), reverbDampKnob.getY());
+
+    outputLevelKnob.setTopLeftPosition(810, 350);
 
     keyboardComponent.setBounds(0, defaultHeight - 80, defaultWidth + 1, 80);
 }
