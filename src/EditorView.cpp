@@ -51,7 +51,7 @@ void EditorView::paint(juce::Graphics& g)
     g.setColour(Colors::accent1);
     g.fillRect(0, 38, defaultWidth, 2);
 
-    g.setFont(Fonts::getFont(32.0f));
+    g.setFont(Fonts::getRegularFont(32.0f));
     g.setColour(juce::Colours::white);
     g.drawSingleLineText("Lost & Found", 20, 27);
     g.setColour(Colors::accent1);
@@ -59,8 +59,8 @@ void EditorView::paint(juce::Graphics& g)
 
     drawGroup(g, "Tuning", 40, 110, 270);
     drawGroup(g, "Envelope", 330, 110, 270);
-    drawGroup(g, "Piano", 620, 110, 270);
-    //drawGroup(g, "E-Piano", 620, 110, 270);
+    drawGroup(g, "Filter", 620, 110, 270);
+    //drawGroup(g, "Modulation", 620, 110, 270);
 
     drawGroup(g, "Hardness", 25, 300, 180);
     drawGroup(g, "FX", 225, 300, 270);
@@ -76,13 +76,13 @@ void EditorView::paint(juce::Graphics& g)
 
 void EditorView::drawGroup(juce::Graphics& g, const juce::String& name, int x, int y, int width)
 {
-    auto font = Fonts::getFont();
+    auto font = Fonts::getRegularFont();
     auto textWidth = int(std::ceil(juce::TextLayout::getStringWidth(font, name)));
 
     int offset = (width - textWidth) / 2;
 
     g.setColour(Colors::text);
-    g.setFont(Fonts::getFont());
+    g.setFont(Fonts::getRegularFont());
     g.drawSingleLineText(name, x + offset, y + 22);
 
     g.setColour(Colors::text.withAlpha(0.5f));

@@ -65,4 +65,7 @@ JUCE is copyright © Raw Material Software.
 
 VST® is a trademark of Steinberg Media Technologies GmbH, registered in Europe and other countries.
 
-The font used is [Goudy Bookletter 1911](https://github.com/theleagueof/goudy-bookletter-1911) by [Barry Schwartz](http://www.crudfactory.com). Licensed under the terms of the SIL Open Font License.
+The fonts used are licensed under the SIL Open Font License:
+
+- [Goudy Bookletter 1911](https://github.com/theleagueof/goudy-bookletter-1911). Copyright (c) 2009, [Barry Schwartz](http://www.crudfactory.com)
+- [Victor Mono](https://rubjo.github.io/victor-mono/). Copyright (c) 2022, [Rune Bjørnerås](https://github.com/rubjo)

@@ -99,6 +99,7 @@ target_sources(${PROJECT_NAME} PRIVATE
 
 juce_add_binary_data(BinaryData SOURCES
     fonts/GoudyBookletter1911.otf
+    fonts/VictorMono-Regular.ttf
     images/Knob.svg
 )
 
@@ -114,6 +115,7 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         BinaryData
+        juce::juce_animation
         juce::juce_audio_utils
         juce::juce_dsp
     PUBLIC

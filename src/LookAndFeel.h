@@ -12,7 +12,8 @@ namespace Colors
 
 namespace Fonts
 {
-    juce::Font getFont(float height = 24.0f);
+    juce::Font getRegularFont(float height = 24.0f);
+    juce::Font getMonoFont(float height = 20.0f);
 }
 
 class LookAndFeel : public juce::LookAndFeel_V4

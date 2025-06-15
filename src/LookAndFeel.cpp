@@ -3,12 +3,20 @@
 
 namespace Fonts
 {
-static const juce::Typeface::Ptr typeface = juce::Typeface::createSystemTypefaceFor(
+static const juce::Typeface::Ptr typefaceRegular = juce::Typeface::createSystemTypefaceFor(
     BinaryData::GoudyBookletter1911_otf, BinaryData::GoudyBookletter1911_otfSize);
 
-juce::Font getFont(float height)
+static const juce::Typeface::Ptr typefaceMono = juce::Typeface::createSystemTypefaceFor(
+    BinaryData::VictorMonoRegular_ttf, BinaryData::VictorMonoRegular_ttfSize);
+
+juce::Font getRegularFont(float height)
 {
-    return juce::Font(juce::FontOptions(typeface).withHeight(height));
+    return juce::Font(juce::FontOptions(typefaceRegular).withHeight(height));
+}
+
+juce::Font getMonoFont(float height)
+{
+    return juce::Font(juce::FontOptions(typefaceMono).withHeight(height));
 }
 
 }  // namespace Fonts
@@ -78,7 +86,11 @@ void LookAndFeel::drawRotarySlider(
     g.setColour(juce::Colour(0xff0d2629));
     g.fillRoundedRectangle(-2.0f, 7.0f - knobRect.getCentreY(), 4.0f, 12.0f, 2.0f);
 
-    g.setColour(Colors::accent2);
+    if (slider.isMouseOverOrDragging()) {
+        g.setColour(Colors::accent2);
+    } else {
+        g.setColour(juce::Colour(0xff9aa194));
+    }
     g.fillRoundedRectangle(-2.0f, 8.0f - knobRect.getCentreY(), 4.0f, 12.0f, 2.0f);
 
     g.restoreState();
