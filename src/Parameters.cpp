@@ -29,6 +29,7 @@ inline void castParameter(juce::AudioProcessorValueTreeState& apvts, const juce:
 
 Parameters::Parameters(juce::AudioProcessorValueTreeState& apvts)
 {
+    castParameter(apvts, ParameterID::instrument, instrumentParam);
     castParameter(apvts, ParameterID::fineTuning, fineTuningParam);
     castParameter(apvts, ParameterID::randomDetuning, randomDetuningParam);
     castParameter(apvts, ParameterID::stretchTuning, stretchTuningParam);
@@ -54,6 +55,12 @@ Parameters::Parameters(juce::AudioProcessorValueTreeState& apvts)
 juce::AudioProcessorValueTreeState::ParameterLayout Parameters::createParameterLayout()
 {
     juce::AudioProcessorValueTreeState::ParameterLayout layout;
+
+    layout.add(std::make_unique<juce::AudioParameterChoice>(
+        ParameterID::instrument,
+        "Instrument",
+        juce::StringArray { "Acoustic", "Electric" }, 0
+        ));
 
     layout.add(std::make_unique<juce::AudioParameterFloat>(
         ParameterID::fineTuning,

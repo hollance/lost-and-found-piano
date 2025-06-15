@@ -9,36 +9,33 @@ EditorView::EditorView(AudioProcessor& p) :
     addAndMakeVisible(fineTuningKnob);
     addAndMakeVisible(randomDetuningKnob);
     addAndMakeVisible(stretchTuningKnob);
-
     addAndMakeVisible(envDecayKnob);
     addAndMakeVisible(envReleaseKnob);
     addAndMakeVisible(velocitySensitivityKnob);
-
     addAndMakeVisible(hardnessKnob);
     addAndMakeVisible(velocityToHardnessKnob);
-
     addAndMakeVisible(mufflingFilterKnob);
     addAndMakeVisible(velocityToMufflingKnob);
-
     addChildComponent(tremoloKnob);
     addChildComponent(autopanKnob);
     addChildComponent(lfoRateKnob);
-
     addAndMakeVisible(trebleBoostKnob);
     addAndMakeVisible(overdriveKnob);
     addAndMakeVisible(stereoWidthKnob);
-
     addAndMakeVisible(reverbSizeKnob);
     addAndMakeVisible(reverbDampKnob);
     addAndMakeVisible(reverbMixKnob);
-
     addAndMakeVisible(outputLevelKnob);
-
     addAndMakeVisible(keyboardComponent);
+
+    updateUI();
+
+    audioProcessor.params.instrumentParam->addListener(this);
 }
 
 EditorView::~EditorView()
 {
+    audioProcessor.params.instrumentParam->removeListener(this);
 }
 
 void EditorView::paint(juce::Graphics& g)
@@ -59,8 +56,12 @@ void EditorView::paint(juce::Graphics& g)
 
     drawGroup(g, "Tuning", 40, 110, 270);
     drawGroup(g, "Envelope", 330, 110, 270);
-    drawGroup(g, "Filter", 620, 110, 270);
-    //drawGroup(g, "Modulation", 620, 110, 270);
+
+    if (audioProcessor.params.instrumentParam->getIndex() == 0) {
+        drawGroup(g, "Filter", 620, 110, 270);
+    } else {
+        drawGroup(g, "Modulation", 620, 110, 270);
+    }
 
     drawGroup(g, "Hardness", 25, 300, 180);
     drawGroup(g, "FX", 225, 300, 270);
@@ -124,4 +125,23 @@ void EditorView::resized()
     outputLevelKnob.setTopLeftPosition(810, 350);
 
     keyboardComponent.setBounds(0, defaultHeight - 80, defaultWidth + 1, 80);
+}
+
+void EditorView::parameterValueChanged(int parameterIndex, float newValue)
+{
+    updateUI();
+}
+
+void EditorView::updateUI()
+{
+    bool piano = (audioProcessor.params.instrumentParam->getIndex() == 0);
+
+    mufflingFilterKnob.setVisible(piano);
+    velocityToMufflingKnob.setVisible(piano);
+
+    tremoloKnob.setVisible(!piano);
+    autopanKnob.setVisible(!piano);
+    lfoRateKnob.setVisible(!piano);
+
+    repaint();
 }

@@ -4,6 +4,7 @@
 
 namespace ParameterID
 {
+    const juce::ParameterID instrument { "instrument", 1 };
     const juce::ParameterID fineTuning { "fineTuning", 1 };
     const juce::ParameterID randomDetuning { "randomDetuning", 1 };
     const juce::ParameterID stretchTuning { "stretchTuning", 1 };
@@ -41,6 +42,8 @@ public:
     float sampleRate = 44100.0f;
 
     float outputLevel = 1.0f;
+
+    juce::AudioParameterChoice* instrumentParam;
 
 private:
     juce::AudioParameterFloat* fineTuningParam;

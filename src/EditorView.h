@@ -10,7 +10,7 @@
 static constexpr int defaultWidth = 935;
 static constexpr int defaultHeight = 561;
 
-class EditorView : public juce::Component
+class EditorView : public juce::Component, private juce::AudioParameterChoice::Listener
 {
 public:
     EditorView(AudioProcessor& audioProcessor);
@@ -20,7 +20,11 @@ public:
     void resized() override;
 
 private:
+    void parameterValueChanged(int parameterIndex, float newValue) override;
+    void parameterGestureChanged(int, bool) override { }
+
     void drawGroup(juce::Graphics&, const juce::String& name, int x, int y, int width);
+    void updateUI();
 
     AudioProcessor& audioProcessor;
 
