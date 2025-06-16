@@ -35,7 +35,7 @@ private:
     juce::VBlankAnimatorUpdater animatorUpdater { this };
 
     juce::Animator animator = juce::ValueAnimatorBuilder {}
-        .withEasing(juce::Easings::createEase())
+        .withEasing(juce::Easings::createEaseInOutCubic())
         .withDurationMs(500.0)
         .withValueChangedCallback([this](auto value) {
             nameLabel.setAlpha(value);

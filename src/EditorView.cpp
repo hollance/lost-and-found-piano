@@ -118,8 +118,9 @@ void EditorView::resized()
 
 void EditorView::parameterValueChanged(int, float)
 {
-    filterGroup.setVisible(true);
-    modulationGroup.setVisible(true);
+    bool isPiano = (audioProcessor.params.instrumentParam->getIndex() == 0);
+    filterGroup.setVisible(isPiano);
+    modulationGroup.setVisible(!isPiano);
 
     animatorUpdater.removeAnimator(animator);
     animatorUpdater.addAnimator(animator, [this]

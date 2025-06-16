@@ -69,14 +69,12 @@ private:
     juce::VBlankAnimatorUpdater animatorUpdater { this };
 
     juce::Animator animator = juce::ValueAnimatorBuilder {}
-        .withEasing(juce::Easings::createEase())
+        .withEasing(juce::Easings::createEaseInOutCubic())
         .withDurationMs(500.0)
         .withValueChangedCallback([this](auto value) {
-            if (audioProcessor.params.instrumentParam->getIndex() == 0) {
+            if (filterGroup.isVisible()) {
                 filterGroup.setAlpha(value);
-                modulationGroup.setAlpha(1.0f - value);
             } else {
-                filterGroup.setAlpha(1.0f - value);
                 modulationGroup.setAlpha(value);
             }
         })
