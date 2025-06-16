@@ -58,7 +58,7 @@ void RotaryKnob::paint([[maybe_unused]] juce::Graphics& g)
 //    g.setColour(juce::Colours::purple);
 //    g.drawRect(getLocalBounds());
 //    g.setColour(juce::Colours::teal);
-//    g.drawRect(label.getBounds());
+//    g.drawRect(nameLabel.getBounds());
 }
 
 void RotaryKnob::resized()

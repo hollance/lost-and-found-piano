@@ -6,26 +6,42 @@ EditorView::EditorView(AudioProcessor& p) :
 {
     setOpaque(true);
 
-    addAndMakeVisible(fineTuningKnob);
-    addAndMakeVisible(randomDetuningKnob);
-    addAndMakeVisible(stretchTuningKnob);
-    addAndMakeVisible(envDecayKnob);
-    addAndMakeVisible(envReleaseKnob);
-    addAndMakeVisible(velocitySensitivityKnob);
-    addAndMakeVisible(hardnessKnob);
-    addAndMakeVisible(velocityToHardnessKnob);
-    addAndMakeVisible(mufflingFilterKnob);
-    addAndMakeVisible(velocityToMufflingKnob);
-    addChildComponent(tremoloKnob);
-    addChildComponent(autopanKnob);
-    addChildComponent(lfoRateKnob);
-    addAndMakeVisible(trebleBoostKnob);
-    addAndMakeVisible(overdriveKnob);
-    addAndMakeVisible(stereoWidthKnob);
-    addAndMakeVisible(reverbSizeKnob);
-    addAndMakeVisible(reverbDampKnob);
-    addAndMakeVisible(reverbMixKnob);
-    addAndMakeVisible(outputLevelKnob);
+    addAndMakeVisible(tuningGroup);
+    tuningGroup.addAndMakeVisible(fineTuningKnob);
+    tuningGroup.addAndMakeVisible(randomDetuningKnob);
+    tuningGroup.addAndMakeVisible(stretchTuningKnob);
+
+    addAndMakeVisible(envelopeGroup);
+    envelopeGroup.addAndMakeVisible(envDecayKnob);
+    envelopeGroup.addAndMakeVisible(envReleaseKnob);
+    envelopeGroup.addAndMakeVisible(velocitySensitivityKnob);
+
+    addAndMakeVisible(filterGroup);
+    filterGroup.addAndMakeVisible(mufflingFilterKnob);
+    filterGroup.addAndMakeVisible(velocityToMufflingKnob);
+
+    addAndMakeVisible(modulationGroup);
+    modulationGroup.addAndMakeVisible(tremoloKnob);
+    modulationGroup.addAndMakeVisible(autopanKnob);
+    modulationGroup.addAndMakeVisible(lfoRateKnob);
+
+    addAndMakeVisible(hardnessGroup);
+    hardnessGroup.addAndMakeVisible(hardnessKnob);
+    hardnessGroup.addAndMakeVisible(velocityToHardnessKnob);
+
+    addAndMakeVisible(effectsGroup);
+    effectsGroup.addAndMakeVisible(trebleBoostKnob);
+    effectsGroup.addAndMakeVisible(overdriveKnob);
+    effectsGroup.addAndMakeVisible(stereoWidthKnob);
+
+    addAndMakeVisible(reverbGroup);
+    reverbGroup.addAndMakeVisible(reverbSizeKnob);
+    reverbGroup.addAndMakeVisible(reverbDampKnob);
+    reverbGroup.addAndMakeVisible(reverbMixKnob);
+
+    addAndMakeVisible(outputGroup);
+    outputGroup.addAndMakeVisible(outputLevelKnob);
+
     addAndMakeVisible(keyboardComponent);
 
     updateUI();
@@ -44,7 +60,6 @@ void EditorView::paint(juce::Graphics& g)
 
     g.setColour(juce::Colour(0xff000000));
     g.fillRect(0, 0, defaultWidth, 38);
-
     g.setColour(Colors::accent1);
     g.fillRect(0, 38, defaultWidth, 2);
 
@@ -54,94 +69,70 @@ void EditorView::paint(juce::Graphics& g)
     g.setColour(Colors::accent1);
     g.drawSingleLineText("Piano", 166, 27);
 
-    drawGroup(g, "Tuning", 40, 110, 270);
-    drawGroup(g, "Envelope", 330, 110, 270);
-
-    if (audioProcessor.params.instrumentParam->getIndex() == 0) {
-        drawGroup(g, "Filter", 620, 110, 270);
-    } else {
-        drawGroup(g, "Modulation", 620, 110, 270);
-    }
-
-    drawGroup(g, "Hardness", 25, 300, 180);
-    drawGroup(g, "FX", 225, 300, 270);
-    drawGroup(g, "Reverb", 515, 300, 270);
-    drawGroup(g, "Out", 805, 300, 105);
-
     g.setColour(Colors::accent1);
     g.fillRect(0, defaultHeight - 84, defaultWidth, 4);
-
     g.setColour(juce::Colour(0xff000000));
     g.fillRect(0, defaultHeight - 80, defaultWidth, 90);
 }
 
-void EditorView::drawGroup(juce::Graphics& g, const juce::String& name, int x, int y, int width)
-{
-    auto font = Fonts::getRegularFont();
-    auto textWidth = int(std::ceil(juce::TextLayout::getStringWidth(font, name)));
-
-    int offset = (width - textWidth) / 2;
-
-    g.setColour(Colors::text);
-    g.setFont(Fonts::getRegularFont());
-    g.drawSingleLineText(name, x + offset, y + 22);
-
-    g.setColour(Colors::text.withAlpha(0.5f));
-    g.fillRect(x + 10, y + 14, offset - 15, 2);
-    g.fillRect(x + width - (offset - 5), y + 14, offset - 15, 2);
-
-    //g.setColour(juce::Colours::yellow);
-    //g.drawRect(x, y, width, 30);
-}
-
 void EditorView::resized()
 {
-    fineTuningKnob.setTopLeftPosition(40, 160);
+    tuningGroup.setBounds(40, 110, 270, 145);
+    fineTuningKnob.setTopLeftPosition(0, 50);
     randomDetuningKnob.setTopLeftPosition(fineTuningKnob.getRight(), fineTuningKnob.getY());
     stretchTuningKnob.setTopLeftPosition(randomDetuningKnob.getRight(), randomDetuningKnob.getY());
 
-    envDecayKnob.setTopLeftPosition(330, 160);
+    envelopeGroup.setBounds(330, 110, 270, 145);
+    envDecayKnob.setTopLeftPosition(0, 50);
     envReleaseKnob.setTopLeftPosition(envDecayKnob.getRight(), envDecayKnob.getY());
     velocitySensitivityKnob.setTopLeftPosition(envReleaseKnob.getRight(), envReleaseKnob.getY());
 
-    mufflingFilterKnob.setTopLeftPosition(665, 160);
+    filterGroup.setBounds(620, 110, 270, 145);
+    mufflingFilterKnob.setTopLeftPosition(45, 50);
     velocityToMufflingKnob.setTopLeftPosition(mufflingFilterKnob.getRight(), mufflingFilterKnob.getY());
 
-    tremoloKnob.setTopLeftPosition(620, 160);
+    modulationGroup.setBounds(620, 110, 270, 145);
+    tremoloKnob.setTopLeftPosition(0, 50);
     autopanKnob.setTopLeftPosition(tremoloKnob.getRight(), tremoloKnob.getY());
     lfoRateKnob.setTopLeftPosition(autopanKnob.getRight(), autopanKnob.getY());
 
-    hardnessKnob.setTopLeftPosition(25, 350);
+    hardnessGroup.setBounds(25, 300, 180, 145);
+    hardnessKnob.setTopLeftPosition(0, 50);
     velocityToHardnessKnob.setTopLeftPosition(hardnessKnob.getRight(), hardnessKnob.getY());
 
-    trebleBoostKnob.setTopLeftPosition(225, 350);
+    effectsGroup.setBounds(225, 300, 270, 145);
+    trebleBoostKnob.setTopLeftPosition(0, 50);
     overdriveKnob.setTopLeftPosition(trebleBoostKnob.getRight(), trebleBoostKnob.getY());
     stereoWidthKnob.setTopLeftPosition(overdriveKnob.getRight(), overdriveKnob.getY());
 
-    reverbSizeKnob.setTopLeftPosition(515, 350);
+    reverbGroup.setBounds(515, 300, 270, 145);
+    reverbSizeKnob.setTopLeftPosition(0, 50);
     reverbDampKnob.setTopLeftPosition(reverbSizeKnob.getRight(), reverbSizeKnob.getY());
     reverbMixKnob.setTopLeftPosition(reverbDampKnob.getRight(), reverbDampKnob.getY());
 
-    outputLevelKnob.setTopLeftPosition(810, 350);
+    outputGroup.setBounds(810, 300, 105, 145);
+    outputLevelKnob.setTopLeftPosition(0, 50);
 
     keyboardComponent.setBounds(0, defaultHeight - 80, defaultWidth + 1, 80);
 }
 
-void EditorView::parameterValueChanged(int parameterIndex, float newValue)
+void EditorView::parameterValueChanged(int, float)
 {
-    updateUI();
+    filterGroup.setVisible(true);
+    modulationGroup.setVisible(true);
+
+    animatorUpdater.removeAnimator(animator);
+    animatorUpdater.addAnimator(animator, [this]
+    {
+        animatorUpdater.removeAnimator(animator);
+    });
+
+    animator.start();
 }
 
 void EditorView::updateUI()
 {
-    bool piano = (audioProcessor.params.instrumentParam->getIndex() == 0);
-
-    mufflingFilterKnob.setVisible(piano);
-    velocityToMufflingKnob.setVisible(piano);
-
-    tremoloKnob.setVisible(!piano);
-    autopanKnob.setVisible(!piano);
-    lfoRateKnob.setVisible(!piano);
-
-    repaint();
+    bool isPiano = (audioProcessor.params.instrumentParam->getIndex() == 0);
+    filterGroup.setVisible(isPiano);
+    modulationGroup.setVisible(!isPiano);
 }

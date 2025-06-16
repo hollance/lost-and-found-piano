@@ -83,6 +83,7 @@ juce_generate_juce_header(${PROJECT_NAME})
 target_sources(${PROJECT_NAME} PRIVATE
     src/EditorView.cpp
     src/EditorView.h
+    src/GroupView.h
     src/LookAndFeel.cpp
     src/LookAndFeel.h
     src/MidiKeyboardComponent.cpp
