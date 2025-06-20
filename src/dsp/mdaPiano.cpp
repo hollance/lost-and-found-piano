@@ -219,7 +219,6 @@ void MDAPiano::processEvents(juce::MidiBuffer& midiMessages) noexcept
         if (npos > EVENTBUFFER) npos -= 3;
     }
     _notes[npos] = EVENTS_DONE;
-    midiMessages.clear();
 }
 
 void MDAPiano::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages) noexcept

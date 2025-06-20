@@ -81,8 +81,6 @@ void MDAEPiano::prepareToPlay(double sampleRate) noexcept
 {
     _sampleRate = float(sampleRate);
     _inverseSampleRate = 1.0f / _sampleRate;
-
-    reset();
 }
 
 void MDAEPiano::reset() noexcept
@@ -273,7 +271,6 @@ void MDAEPiano::processEvents(juce::MidiBuffer& midiMessages) noexcept
         if (npos > EVENTBUFFER) npos -= 3;
     }
     _notes[npos] = EVENTS_DONE;
-    midiMessages.clear();
 }
 
 void MDAEPiano::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages) noexcept

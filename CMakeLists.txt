@@ -81,6 +81,8 @@ juce_add_plugin(${PROJECT_NAME}
 juce_generate_juce_header(${PROJECT_NAME})
 
 target_sources(${PROJECT_NAME} PRIVATE
+    src/dsp/mdaAmbience.cpp
+    src/dsp/mdaAmbience.h
     src/dsp/mdaEPiano.cpp
     src/dsp/mdaEPiano.h
     src/dsp/mdaEPianoData.h

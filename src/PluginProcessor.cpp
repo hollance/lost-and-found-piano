@@ -21,12 +21,19 @@ void AudioProcessor::prepareToPlay(double sampleRate, [[maybe_unused]] int maxim
     params.prepareToPlay(synthRate);
     acousticPiano.prepareToPlay(sampleRate);
     electricPiano.prepareToPlay(sampleRate);
+    reverb.prepareToPlay(sampleRate);
     reset();
+}
+
+void AudioProcessor::releaseResources()
+{
+    reverb.releaseResources();
 }
 
 void AudioProcessor::reset()
 {
     params.reset();
+    reverb.reset();
     lastInstrument = -1;
 }
 
@@ -53,6 +60,8 @@ void AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBu
         electricPiano.processBlock(buffer, midiMessages);
     }
     lastInstrument = instrument;
+
+    reverb.processBlock(buffer);
 
     float *out0 = buffer.getWritePointer(0);
     float *out1 = buffer.getWritePointer(1);
