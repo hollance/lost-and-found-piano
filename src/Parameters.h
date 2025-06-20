@@ -39,8 +39,12 @@ public:
     void update() noexcept;
     void smoothen() noexcept;
 
-    float sampleRate = 44100.0f;
+    bool isAcoustic() const noexcept
+    {
+        return instrumentParam->getIndex() == 0;
+    }
 
+    float sampleRate = 44100.0f;
     float outputLevel = 1.0f;
 
     juce::AudioParameterChoice* instrumentParam;

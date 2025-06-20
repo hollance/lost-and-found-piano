@@ -24,6 +24,9 @@ public:
     void drawCornerResizer(juce::Graphics&, int, int, bool, bool) override;
     void drawRotarySlider(juce::Graphics&, int, int, int, int, float, float, float, juce::Slider&) override;
 
+    void drawButtonText(juce::Graphics&, juce::TextButton&, bool, bool) override;
+    void drawButtonBackground(juce::Graphics&, juce::Button&, const juce::Colour&, bool, bool) override;
+
 private:
     std::unique_ptr<juce::Drawable> knobSVG;
     juce::DropShadow dropShadow { juce::Colour(0xff0a0c0b), 16, { 0, 4 } };

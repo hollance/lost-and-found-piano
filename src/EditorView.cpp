@@ -2,9 +2,20 @@
 
 EditorView::EditorView(AudioProcessor& p) :
     audioProcessor(p),
+    instrumentAttachment(p.apvts, ParameterID::instrument.getParamID(), { &acousticButton, &electricButton }),
     keyboardComponent(p.keyboardState, MidiKeyboardComponent::horizontalKeyboard)
 {
     setOpaque(true);
+
+    acousticButton.setButtonText("Acoustic");
+    acousticButton.setLookAndFeel(&lf);
+    addAndMakeVisible(acousticButton);
+
+    electricButton.setButtonText("Electric");
+    electricButton.setLookAndFeel(&lf);
+    addAndMakeVisible(electricButton);
+
+    addAndMakeVisible(selectionBar);
 
     addAndMakeVisible(tuningGroup);
     tuningGroup.addAndMakeVisible(fineTuningKnob);
@@ -77,40 +88,46 @@ void EditorView::paint(juce::Graphics& g)
 
 void EditorView::resized()
 {
-    tuningGroup.setBounds(40, 110, 270, 145);
+    acousticButton.setBounds(365, 0, 100, 40);
+    electricButton.setBounds(470, 0, 100, 40);
+
+    selectionBar.setBounds(acousticButton.getToggleState() ? acousticButton.getBounds()
+                                                           : electricButton.getBounds());
+
+    tuningGroup.setBounds(40, 65, 270, 145);
     fineTuningKnob.setTopLeftPosition(0, 50);
     randomDetuningKnob.setTopLeftPosition(fineTuningKnob.getRight(), fineTuningKnob.getY());
     stretchTuningKnob.setTopLeftPosition(randomDetuningKnob.getRight(), randomDetuningKnob.getY());
 
-    envelopeGroup.setBounds(330, 110, 270, 145);
+    envelopeGroup.setBounds(330, 65, 270, 145);
     envDecayKnob.setTopLeftPosition(0, 50);
     envReleaseKnob.setTopLeftPosition(envDecayKnob.getRight(), envDecayKnob.getY());
     velocitySensitivityKnob.setTopLeftPosition(envReleaseKnob.getRight(), envReleaseKnob.getY());
 
-    filterGroup.setBounds(620, 110, 270, 145);
+    filterGroup.setBounds(620, 65, 270, 145);
     mufflingFilterKnob.setTopLeftPosition(45, 50);
     velocityToMufflingKnob.setTopLeftPosition(mufflingFilterKnob.getRight(), mufflingFilterKnob.getY());
 
-    modulationGroup.setBounds(620, 110, 270, 145);
+    modulationGroup.setBounds(620, 65, 270, 145);
     tremoloKnob.setTopLeftPosition(0, 50);
     autopanKnob.setTopLeftPosition(tremoloKnob.getRight(), tremoloKnob.getY());
     lfoRateKnob.setTopLeftPosition(autopanKnob.getRight(), autopanKnob.getY());
 
-    hardnessGroup.setBounds(25, 300, 180, 145);
+    hardnessGroup.setBounds(25, 240, 180, 145);
     hardnessKnob.setTopLeftPosition(0, 50);
     velocityToHardnessKnob.setTopLeftPosition(hardnessKnob.getRight(), hardnessKnob.getY());
 
-    effectsGroup.setBounds(225, 300, 270, 145);
+    effectsGroup.setBounds(225, 240, 270, 145);
     trebleBoostKnob.setTopLeftPosition(0, 50);
     overdriveKnob.setTopLeftPosition(trebleBoostKnob.getRight(), trebleBoostKnob.getY());
     stereoWidthKnob.setTopLeftPosition(overdriveKnob.getRight(), overdriveKnob.getY());
 
-    reverbGroup.setBounds(515, 300, 270, 145);
+    reverbGroup.setBounds(515, 240, 270, 145);
     reverbSizeKnob.setTopLeftPosition(0, 50);
     reverbDampKnob.setTopLeftPosition(reverbSizeKnob.getRight(), reverbSizeKnob.getY());
     reverbMixKnob.setTopLeftPosition(reverbDampKnob.getRight(), reverbDampKnob.getY());
 
-    outputGroup.setBounds(810, 300, 105, 145);
+    outputGroup.setBounds(810, 240, 105, 145);
     outputLevelKnob.setTopLeftPosition(0, 50);
 
     keyboardComponent.setBounds(0, defaultHeight - 80, defaultWidth + 1, 80);
@@ -118,22 +135,25 @@ void EditorView::resized()
 
 void EditorView::parameterValueChanged(int, float)
 {
-    bool isPiano = (audioProcessor.params.instrumentParam->getIndex() == 0);
-    filterGroup.setVisible(isPiano);
-    modulationGroup.setVisible(!isPiano);
+    selectionBar.setBounds(audioProcessor.params.isAcoustic() ? acousticButton.getBounds()
+                                                              : electricButton.getBounds());
+    selectionBar.setTransform({});
 
-    animatorUpdater.removeAnimator(animator);
+    filterGroup.setVisible(audioProcessor.params.isAcoustic());
+    modulationGroup.setVisible(!filterGroup.isVisible());
+
+    filterGroup.setAlpha(0.0f);
+    modulationGroup.setAlpha(0.0f);
+
     animatorUpdater.addAnimator(animator, [this]
     {
         animatorUpdater.removeAnimator(animator);
     });
-
     animator.start();
 }
 
 void EditorView::updateUI()
 {
-    bool isPiano = (audioProcessor.params.instrumentParam->getIndex() == 0);
-    filterGroup.setVisible(isPiano);
-    modulationGroup.setVisible(!isPiano);
+    filterGroup.setVisible(audioProcessor.params.isAcoustic());
+    modulationGroup.setVisible(!filterGroup.isVisible());
 }

@@ -24,6 +24,9 @@ juce::Font getMonoFont(float height)
 LookAndFeel::LookAndFeel()
 {
     knobSVG = juce::Drawable::createFromImageData(BinaryData::Knob_svg, BinaryData::Knob_svgSize);
+
+    setColour(juce::TextButton::textColourOnId, juce::Colours::white);
+    setColour(juce::TextButton::textColourOffId, Colors::text);
 }
 
 void LookAndFeel::drawCornerResizer(
@@ -101,4 +104,30 @@ void LookAndFeel::drawRotarySlider(
     g.drawEllipse(knobRect, 1);
     g.fillEllipse(knobRect.getCentreX() - 3, knobRect.getCentreY() - 3, 6, 6);
     */
+}
+
+void LookAndFeel::drawButtonText(
+    juce::Graphics& g,
+    juce::TextButton& button,
+    [[maybe_unused]] bool shouldDrawButtonAsHighlighted,
+    [[maybe_unused]] bool shouldDrawButtonAsDown)
+{
+    g.setFont(Fonts::getRegularFont(32.0f));
+    g.setColour(button.findColour(button.getToggleState() ? juce::TextButton::textColourOnId
+                                                          : juce::TextButton::textColourOffId)
+                       .withMultipliedAlpha(button.isEnabled() ? 1.0f : 0.5f));
+
+    g.drawFittedText(button.getButtonText(),
+                     0, 0, button.getWidth(), button.getHeight(),
+                      juce::Justification::centred, 1);
+}
+
+void LookAndFeel::drawButtonBackground(
+    [[maybe_unused]] juce::Graphics& g,
+    [[maybe_unused]] juce::Button& button,
+    [[maybe_unused]] const juce::Colour& backgroundColour,
+    [[maybe_unused]] bool shouldDrawButtonAsHighlighted,
+    [[maybe_unused]] bool shouldDrawButtonAsDown)
+{
+    // do nothing
 }

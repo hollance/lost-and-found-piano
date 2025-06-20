@@ -5,11 +5,13 @@
 #include "LookAndFeel.h"
 #include "MidiKeyboardComponent.h"
 #include "PluginProcessor.h"
+#include "RadioButtonAttachment.h"
 #include "RotaryKnob.h"
+#include "SelectionBar.h"
 
 // The width is 52 white piano keys times 18 pixels, minus one pixel.
 static constexpr int defaultWidth = 935;
-static constexpr int defaultHeight = 561;
+static constexpr int defaultHeight = 500;
 
 class EditorView : public juce::Component, private juce::AudioParameterChoice::Listener
 {
@@ -27,6 +29,14 @@ private:
     void updateUI();
 
     AudioProcessor& audioProcessor;
+
+    LookAndFeel lf;
+
+    juce::TextButton acousticButton;
+    juce::TextButton electricButton;
+    SelectionBar selectionBar;
+
+    RadioButtonAttachment instrumentAttachment;
 
     GroupView tuningGroup { "Tuning" };
     RotaryKnob fineTuningKnob { "Fine", audioProcessor.apvts, ParameterID::fineTuning };
@@ -68,7 +78,27 @@ private:
 
     juce::VBlankAnimatorUpdater animatorUpdater { this };
 
-    juce::Animator animator = juce::ValueAnimatorBuilder {}
+    juce::Animator barAnimator = juce::ValueAnimatorBuilder {}
+        .withEasing(juce::Easings::createEaseOutBack())
+        .withDurationMs(300.0)
+        .withValueChangedCallback([this](auto value) {
+            if (audioProcessor.params.isAcoustic()) {
+                float dx = (electricButton.getX() - acousticButton.getX()) * (1.0f - value);
+                selectionBar.setTransform(juce::AffineTransform::translation(dx, 0.0f));
+            } else {
+                float dx = (electricButton.getX() - acousticButton.getX()) * (value - 1.0f);
+                selectionBar.setTransform(juce::AffineTransform::translation(dx, 0.0f));
+            }
+        })
+        .withOnCompleteCallback([this]() {
+            selectionBar.setBounds(
+                audioProcessor.params.isAcoustic() ? acousticButton.getBounds()
+                                                   : electricButton.getBounds());
+            selectionBar.setTransform({});
+        })
+        .build();
+
+    juce::Animator groupAnimator = juce::ValueAnimatorBuilder {}
         .withEasing(juce::Easings::createEaseInOutCubic())
         .withDurationMs(500.0)
         .withValueChangedCallback([this](auto value) {
@@ -84,6 +114,8 @@ private:
             updateUI();
         })
         .build();
+
+    juce::Animator animator = juce::AnimatorSetBuilder(barAnimator).followedBy(groupAnimator).build();
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(EditorView)
 };

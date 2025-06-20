@@ -94,8 +94,11 @@ target_sources(${PROJECT_NAME} PRIVATE
     src/PluginEditor.h
     src/PluginProcessor.cpp
     src/PluginProcessor.h
+    src/RadioButtonAttachment.cpp
+    src/RadioButtonAttachment.h
     src/RotaryKnob.cpp
     src/RotaryKnob.h
+    src/SelectionBar.h
 )
 
 juce_add_binary_data(BinaryData SOURCES
