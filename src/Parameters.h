@@ -36,7 +36,6 @@ public:
     void prepareToPlay(float sampleRate) noexcept;
     void reset() noexcept;
     void update() noexcept;
-    void smoothen() noexcept;
 
     bool isAcoustic() const noexcept
     {
@@ -44,7 +43,6 @@ public:
     }
 
     float sampleRate = 44100.0f;
-    float outputLevel = 1.0f;
 
     juce::AudioParameterChoice* instrumentParam;
     juce::AudioParameterFloat* fineTuningParam;
@@ -67,6 +65,5 @@ public:
     juce::AudioParameterFloat* reverbMixParam;
     juce::AudioParameterFloat* outputLevelParam;
 
-private:
     juce::LinearSmoothedValue<float> outputLevelSmoother;
 };

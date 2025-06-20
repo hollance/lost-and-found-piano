@@ -244,8 +244,3 @@ void Parameters::update() noexcept
 {
     outputLevelSmoother.setTargetValue(juce::Decibels::decibelsToGain(outputLevelParam->get()));
 }
-
-void Parameters::smoothen() noexcept
-{
-    outputLevel = outputLevelSmoother.getNextValue();
-}

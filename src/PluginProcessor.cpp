@@ -43,7 +43,15 @@ void AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBu
 //    acousticPiano.processBlock(buffer, midiMessages);
     electricPiano.processBlock(buffer, midiMessages);
 
-    // TODO: apply output gain + fixed -12 dB
+    float *out0 = buffer.getWritePointer(0);
+    float *out1 = buffer.getWritePointer(1);
+
+    // Apply output gain and a fixed gain of -12 dB as the samples are quite loud.
+    for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
+        float gain = params.outputLevelSmoother.getNextValue() * 0.25f;
+        out0[sample] *= gain;
+        out1[sample] *= gain;
+    }
 
     midiMessages.clear();
 }
