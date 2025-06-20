@@ -11,8 +11,7 @@ AudioProcessor::AudioProcessor() :
 
 bool AudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
 {
-    return layouts.getMainOutputChannelSet() == juce::AudioChannelSet::mono()
-        || layouts.getMainOutputChannelSet() == juce::AudioChannelSet::stereo();
+    return layouts.getMainOutputChannelSet() == juce::AudioChannelSet::stereo();
 }
 
 void AudioProcessor::prepareToPlay(double sampleRate, [[maybe_unused]] int maximumBlockSize)
