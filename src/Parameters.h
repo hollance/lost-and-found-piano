@@ -48,8 +48,6 @@ public:
     float outputLevel = 1.0f;
 
     juce::AudioParameterChoice* instrumentParam;
-
-private:
     juce::AudioParameterFloat* fineTuningParam;
     juce::AudioParameterFloat* randomDetuningParam;
     juce::AudioParameterFloat* stretchTuningParam;
@@ -71,5 +69,6 @@ private:
     juce::AudioParameterFloat* reverbMixParam;
     juce::AudioParameterFloat* outputLevelParam;
 
+private:
     juce::LinearSmoothedValue<float> outputLevelSmoother;
 };

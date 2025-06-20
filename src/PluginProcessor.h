@@ -2,6 +2,7 @@
 
 #include <JuceHeader.h>
 #include "Parameters.h"
+#include "dsp/mdaPiano.h"
 
 class AudioProcessor : public juce::AudioProcessor
 {
@@ -34,6 +35,8 @@ public:
     juce::MidiKeyboardState keyboardState;
 
     Parameters params;
+
+    MDAPiano piano { params };
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioProcessor)

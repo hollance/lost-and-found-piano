@@ -19,12 +19,14 @@ void AudioProcessor::prepareToPlay(double sampleRate, [[maybe_unused]] int maxim
 {
     float synthRate = float(sampleRate);
     params.prepareToPlay(synthRate);
+    piano.prepareToPlay(sampleRate);
     reset();
 }
 
 void AudioProcessor::reset()
 {
     params.reset();
+    piano.reset();
 }
 
 void AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
@@ -35,6 +37,8 @@ void AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBu
     buffer.clear();
 
     keyboardState.processNextMidiBuffer(midiMessages, 0, buffer.getNumSamples(), true);
+
+    piano.processBlock(buffer, midiMessages);
 
     midiMessages.clear();
 }
