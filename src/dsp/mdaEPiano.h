@@ -78,6 +78,7 @@ private:
 
     // Amount of modulation (LFO depth) for left and right channels.
     float _lmod, _rmod;
+    float _lmodw, _rmodw;  // from mod wheel
 
     // The LFO phase increment in radians.
     float _lfoRate;

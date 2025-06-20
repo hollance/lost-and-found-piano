@@ -105,6 +105,9 @@ void MDAEPiano::reset() noexcept
     // Reset the LFOs.
     _lfo0 = 0.0f;
     _lfo1 = 1.0f;
+
+    // Mod wheel modulation amount.
+    _lmodw = _rmodw = 0.0f;
 }
 
 void MDAEPiano::update() noexcept
@@ -220,14 +223,10 @@ void MDAEPiano::processEvents(juce::MidiBuffer& midiMessages) noexcept
                         // Convert the mod wheel position to a value between 0 and 1.
                         float modwhl = 0.0078f * float(data2);
 
-                        // Override autopan/tremolo depth if the mod wheel is
-                        // used. This overwrites the "Modulation" parameter.
-                        // (It would be better if the mod wheel value was
-                        // stored in its own member variable, and then we add
-                        // that amount to the Modulation parameter amount.)
+                        // Add to autopan/tremolo depth if the mod wheel is used.
                         if (modwhl > 0.05f) {
-                            _rmod = _lmod = modwhl;
-                            if (_modulation < 0.5f) _rmod = -_rmod;  // for panning mode
+                            _rmodw = _lmodw = modwhl;
+                            if (_modulation < 0.5f) _lmodw = -_lmodw;  // for panning mode
                         }
                         break;
                     }
@@ -259,6 +258,7 @@ void MDAEPiano::processEvents(juce::MidiBuffer& midiMessages) noexcept
                             // the voice very quickly.
                             for (int v = 0; v < NVOICES; ++v) _voices[v].decay = 0.99f;
                             _sustain = 0;
+                            _lmodw = _rmodw = 0.0f;
                         }
                         break;
                 }
@@ -409,8 +409,8 @@ void MDAEPiano::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&
             // the same amount. If it is panning modulation (autopanning), when the
             // left channel amplitude goes up, the right channel amplitude goes down,
             // and vice versa.
-            l += l * _lmod * _lfo1;
-            r += r * _rmod * _lfo1;
+            l += l * (_lmod + _lmodw) * _lfo1;
+            r += r * (_rmod + _rmodw) * _lfo1;
 
             // Write the result into the output buffer.
             *out0++ = l;
