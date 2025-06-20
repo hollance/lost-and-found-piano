@@ -1,10 +1,10 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "../PluginProcessor.h"
 #include "GroupView.h"
 #include "LookAndFeel.h"
 #include "MidiKeyboardComponent.h"
-#include "PluginProcessor.h"
 #include "RadioButtonAttachment.h"
 #include "RotaryKnob.h"
 #include "SelectionBar.h"

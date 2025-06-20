@@ -2,8 +2,8 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
-#include "EditorView.h"
-#include "LookAndFeel.h"
+#include "gui/EditorView.h"
+#include "gui/LookAndFeel.h"
 
 class AudioProcessorEditor : public juce::AudioProcessorEditor
 {
