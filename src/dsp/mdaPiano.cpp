@@ -326,10 +326,10 @@ void MDAPiano::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& 
                 // Ear protection: just in case the sound explodes, turn it off.
                 // Silly bugs (such as filter cutoff > Nyquist) can blow out your
                 // eardrums...
-                if ((l < -2.0f) || (l > 2.0f)) {
+                if ((l < -10.0f) || (l > 10.0f)) {
                     l = 0.0f;
                 }
-                if ((r < -2.0f) || (r > 2.0f)) {
+                if ((r < -10.0f) || (r > 10.0f)) {
                     r = 0.0f;
                 }
 
@@ -391,6 +391,8 @@ void MDAPiano::noteOn(int note, int velocity) noexcept
                 }
             }
         }
+
+        //DBG("num voices: " << _numActiveVoices);
 
         // === Calculate pitch ===
 
