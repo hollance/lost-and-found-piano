@@ -19,7 +19,7 @@ void AudioProcessor::prepareToPlay(double sampleRate, [[maybe_unused]] int maxim
 {
     float synthRate = float(sampleRate);
     params.prepareToPlay(synthRate);
-    //acousticPiano.prepareToPlay(sampleRate);
+    acousticPiano.prepareToPlay(sampleRate);
     electricPiano.prepareToPlay(sampleRate);
     reset();
 }
@@ -27,8 +27,7 @@ void AudioProcessor::prepareToPlay(double sampleRate, [[maybe_unused]] int maxim
 void AudioProcessor::reset()
 {
     params.reset();
-    //acousticPiano.reset();
-    electricPiano.reset();
+    lastInstrument = -1;
 }
 
 void AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
@@ -40,8 +39,20 @@ void AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBu
 
     keyboardState.processNextMidiBuffer(midiMessages, 0, buffer.getNumSamples(), true);
 
-//    acousticPiano.processBlock(buffer, midiMessages);
-    electricPiano.processBlock(buffer, midiMessages);
+    // Render the active instrument, or switch instruments if necessary.
+    int instrument = params.instrumentParam->getIndex();
+    if (instrument == 0) {
+        if (lastInstrument != instrument) {
+            acousticPiano.reset();
+        }
+        acousticPiano.processBlock(buffer, midiMessages);
+    } else {
+        if (lastInstrument != instrument) {
+            electricPiano.reset();
+        }
+        electricPiano.processBlock(buffer, midiMessages);
+    }
+    lastInstrument = instrument;
 
     float *out0 = buffer.getWritePointer(0);
     float *out1 = buffer.getWritePointer(1);

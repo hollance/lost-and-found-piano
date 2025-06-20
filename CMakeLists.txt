@@ -84,9 +84,10 @@ target_sources(${PROJECT_NAME} PRIVATE
     src/dsp/mdaEPiano.cpp
     src/dsp/mdaEPiano.h
     src/dsp/mdaEPianoData.h
-#    src/dsp/mdaPiano.cpp
-#    src/dsp/mdaPiano.h
-#    src/dsp/mdaPianoData.h
+    src/dsp/mdaPiano.cpp
+    src/dsp/mdaPiano.h
+    src/dsp/mdaPianoData.h
+    src/dsp/SharedDefs.h
     src/gui/EditorView.cpp
     src/gui/EditorView.h
     src/gui/GroupView.h

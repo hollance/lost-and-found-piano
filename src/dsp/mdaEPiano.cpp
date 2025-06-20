@@ -1,25 +1,11 @@
 #include "mdaEPiano.h"
 #include "mdaEPianoData.h"
 
-//MDAEPianoProgram::MDAEPianoProgram(const char *name,
-//                                   float p0, float p1, float p2, float p3,
-//                                   float p4, float p5, float p6, float p7,
-//                                   float p8, float p9, float p10, float p11)
-//{
-//    strcpy(this->name, name);
-//    param[0] = p0; param[1] = p1; param[2]  = p2;  param[3]  = p3;
-//    param[4] = p4; param[5] = p5; param[6]  = p6;  param[7]  = p7;
-//    param[8] = p8; param[9] = p9; param[10] = p10; param[11] = p11;
-//}
-
 MDAEPiano::MDAEPiano(Parameters& params) : _params(params)
 {
     // Just in case...
     _sampleRate = 44100.0f;
     _inverseSampleRate = 1.0f / _sampleRate;
-
-//    createPrograms();
-//    setCurrentProgram(0);
 
     _waves = epianoData;
 
@@ -91,50 +77,6 @@ MDAEPiano::MDAEPiano(Parameters& params) : _params(params)
     }
 }
 
-//int MDAEPianoAudioProcessor::getNumPrograms()
-//{
-//    return NPROGS;
-//}
-//
-//int MDAEPianoAudioProcessor::getCurrentProgram()
-//{
-//    return _currentProgram;
-//}
-//
-//void MDAEPianoAudioProcessor::setCurrentProgram(int index)
-//{
-//    _currentProgram = index;
-//
-//    const char *paramNames[] = {
-//        "Envelope Decay",
-//        "Envelope Release",
-//        "Hardness",
-//        "Treble Boost",
-//        "Modulation",
-//        "LFO Rate",
-//        "Velocity Sensitivity",
-//        "Stereo Width",
-//        "Polyphony",
-//        "Fine Tuning",
-//        "Random Tuning",
-//        "Overdrive",
-//    };
-//
-//    for (int i = 0; i < NPARAMS; ++i) {
-//        apvts.getParameter(paramNames[i])->setValueNotifyingHost(_programs[index].param[i]);
-//    }
-//}
-//
-//const juce::String MDAEPianoAudioProcessor::getProgramName(int index)
-//{
-//    return { _programs[index].name };
-//}
-//
-//void MDAEPianoAudioProcessor::changeProgramName(int index, const juce::String &newName)
-//{
-//    // not implemented
-//}
-
 void MDAEPiano::prepareToPlay(double sampleRate) noexcept
 {
     _sampleRate = float(sampleRate);
@@ -142,25 +84,6 @@ void MDAEPiano::prepareToPlay(double sampleRate) noexcept
 
     reset();
 }
-
-//void MDAEPiano::createPrograms()
-//{
-//    // Note that the presets store the parameters as values between 0 and 1.
-//    // This is because the original plugin was for VST2, which always uses
-//    // parameters in that range. Our parameters have different ranges, for
-//    // example from -50 to +50 cents, but the underlying normalized values
-//    // should still match those from the original version and therefore the
-//    // presets still work!
-//
-//    _programs.emplace_back("Default",   0.500f, 0.500f, 0.500f, 0.500f, 0.500f, 0.650f, 0.250f, 0.500f, 0.50f, 0.500f, 0.146f, 0.000f);
-//    _programs.emplace_back("Bright",    0.500f, 0.500f, 1.000f, 0.800f, 0.500f, 0.650f, 0.250f, 0.500f, 0.50f, 0.500f, 0.146f, 0.500f);
-//    _programs.emplace_back("Mellow",    0.500f, 0.500f, 0.000f, 0.000f, 0.500f, 0.650f, 0.250f, 0.500f, 0.50f, 0.500f, 0.246f, 0.000f);
-//    _programs.emplace_back("Autopan",   0.500f, 0.500f, 0.500f, 0.500f, 0.250f, 0.650f, 0.250f, 0.500f, 0.50f, 0.500f, 0.246f, 0.000f);
-//    _programs.emplace_back("Tremolo",   0.500f, 0.500f, 0.500f, 0.500f, 0.750f, 0.650f, 0.250f, 0.500f, 0.50f, 0.500f, 0.246f, 0.000f);
-//    _programs.emplace_back("(default)", 0.500f, 0.500f, 0.500f, 0.500f, 0.500f, 0.650f, 0.250f, 0.500f, 0.50f, 0.500f, 0.146f, 0.000f);
-//    _programs.emplace_back("(default)", 0.500f, 0.500f, 0.500f, 0.500f, 0.500f, 0.650f, 0.250f, 0.500f, 0.50f, 0.500f, 0.146f, 0.000f);
-//    _programs.emplace_back("(default)", 0.500f, 0.500f, 0.500f, 0.500f, 0.500f, 0.650f, 0.250f, 0.500f, 0.50f, 0.500f, 0.146f, 0.000f);
-//}
 
 void MDAEPiano::reset() noexcept
 {
@@ -369,8 +292,8 @@ void MDAEPiano::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&
     int frame = 0;  // how many samples are already rendered
 
     while (frame < sampleFrames) {
-        // Get the timestamp of the next note on/off event. This is usually in the
-        // future, i.e. a number of samples after the current sample.
+        // Get the timestamp of the next note on/off event. This is usually in
+        // the future, i.e. a number of samples after the current sample.
         int frames = _notes[event++];
 
         // This catches the EVENTS_DONE special event. There are no events left.
@@ -381,8 +304,8 @@ void MDAEPiano::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&
         // to process until the new event actually happens.
         frames -= frame;
 
-        // When we're done with this event, this is how many samples we will have
-        // processed in total.
+        // When we're done with this event, this is how many samples we will
+        // have processed in total.
         frame += frames;
 
         // Until it's time to process the upcoming event, render the active voices.
@@ -445,8 +368,9 @@ void MDAEPiano::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&
                 l += V->outl * x;
                 r += V->outr * x;
 
-                // Ear protection: just in case the sound explodes, turn it off. Silly
-                // bugs (such as filter cutoff > Nyquist) can blow out your eardrums...
+                // Ear protection: just in case the sound explodes, turn it off.
+                // Silly bugs (such as filter cutoff > Nyquist) can blow out your
+                // eardrums...
                 if ((l < -2.0f) || (l > 2.0f)) {
                     l = 0.0f;
                 }

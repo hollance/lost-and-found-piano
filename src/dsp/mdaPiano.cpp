@@ -1,47 +1,12 @@
 #include "mdaPiano.h"
 #include "mdaPianoData.h"
 
-//MDAPianoProgram::MDAPianoProgram()
-//{
-//    param[0]  = 0.50f;  // Decay
-//    param[1]  = 0.50f;  // Release
-//    param[2]  = 0.50f;  // Hardness
-//
-//    param[3]  = 0.50f;  // Vel>Hard
-//    param[4]  = 1.00f;  // Muffle
-//    param[5]  = 0.50f;  // Vel>Muff
-//
-//    param[6]  = 0.33f;  // Vel Curve
-//    param[7]  = 0.50f;  // Stereo
-//    param[8]  = 0.33f;  // Max Poly
-//
-//    param[9]  = 0.50f;  // Tune
-//    param[10] = 0.00f;  // Random
-//    param[11] = 0.50f;  // Stretch
-//
-//    strcpy(name, "mda Piano");
-//}
-//
-//MDAPianoProgram::MDAPianoProgram(const char *name,
-//                                 float p0, float p1, float p2, float p3,
-//                                 float p4, float p5, float p6, float p7,
-//                                 float p8, float p9, float p10, float p11)
-//{
-//    strcpy(this->name, name);
-//    param[0] = p0; param[1] = p1; param[2]  = p2;  param[3]  = p3;
-//    param[4] = p4; param[5] = p5; param[6]  = p6;  param[7]  = p7;
-//    param[8] = p8; param[9] = p9; param[10] = p10; param[11] = p11;
-//}
-
 MDAPiano::MDAPiano(Parameters& params) : _params(params)
 {
     // Just in case...
     _sampleRate = 44100.0f;
     _inverseSampleRate = 1.0f / _sampleRate;
     _delayMax = 0x7F;
-
-//    createPrograms();
-//    setCurrentProgram(0);
 
     _waves = pianoData;
 
@@ -63,50 +28,6 @@ MDAPiano::MDAPiano(Parameters& params) : _params(params)
     _keygroups[14].root = 93; _keygroups[14].high = 999; _keygroups[14].pos = 574123; _keygroups[14].end = 586343; _keygroups[14].loop = 2399;
 }
 
-//int MDAPiano::getNumPrograms()
-//{
-//    return NPROGS;
-//}
-//
-//int MDAPiano::getCurrentProgram()
-//{
-//    return _currentProgram;
-//}
-//
-//void MDAPiano::setCurrentProgram(int index)
-//{
-//    _currentProgram = index;
-//
-//    const char *paramNames[] = {
-//        "Envelope Decay",
-//        "Envelope Release",
-//        "Hardness Offset",
-//        "Velocity to Hardness",
-//        "Muffling Filter",
-//        "Velocity to Muffling",
-//        "Velocity Sensitivity",
-//        "Stereo Width",
-//        "Polyphony",
-//        "Fine Tuning",
-//        "Random Detuning",
-//        "Stretch Tuning",
-//    };
-//
-//    for (int i = 0; i < NPARAMS; ++i) {
-//        apvts.getParameter(paramNames[i])->setValueNotifyingHost(_programs[index].param[i]);
-//    }
-//}
-//
-//const juce::String MDAPiano::getProgramName(int index)
-//{
-//    return { _programs[index].name };
-//}
-//
-//void MDAPiano::changeProgramName(int index, const juce::String &newName)
-//{
-//    // not implemented
-//}
-
 void MDAPiano::prepareToPlay(double sampleRate) noexcept
 {
     _sampleRate = float(sampleRate);
@@ -119,25 +40,6 @@ void MDAPiano::prepareToPlay(double sampleRate) noexcept
     // it's probably good enough... (about 3 ms at 44100 Hz).
     if (_sampleRate > 64000.0f) _delayMax = 0xFF; else _delayMax = 0x7F;
 }
-
-//void MDAPiano::createPrograms()
-//{
-//    // Note that the presets store the parameters as values between 0 and 1.
-//    // This is because the original plugin was for VST2, which always uses
-//    // parameters in that range. Our parameters have different ranges, for
-//    // example from -50 to +50 cents, but the underlying normalized values
-//    // should still match those from the original version and therefore the
-//    // presets still work!
-//
-//    _programs.emplace_back("mda Piano",        0.500f, 0.500f, 0.500f, 0.5f, 0.803f, 0.251f, 0.376f, 0.500f, 0.330f, 0.500f, 0.246f, 0.500f);
-//    _programs.emplace_back("Plain Piano",      0.500f, 0.500f, 0.500f, 0.5f, 0.751f, 0.000f, 0.452f, 0.000f, 0.000f, 0.500f, 0.000f, 0.500f);
-//    _programs.emplace_back("Compressed Piano", 0.902f, 0.399f, 0.623f, 0.5f, 1.000f, 0.331f, 0.299f, 0.499f, 0.330f, 0.500f, 0.000f, 0.500f);
-//    _programs.emplace_back("Dance Piano",      0.399f, 0.251f, 1.000f, 0.5f, 0.672f, 0.124f, 0.127f, 0.249f, 0.330f, 0.500f, 0.283f, 0.667f);
-//    _programs.emplace_back("Concert Piano",    0.648f, 0.500f, 0.500f, 0.5f, 0.298f, 0.602f, 0.550f, 0.850f, 0.356f, 0.500f, 0.339f, 0.660f);
-//    _programs.emplace_back("Dark Piano",       0.500f, 0.602f, 0.000f, 0.5f, 0.304f, 0.200f, 0.336f, 0.651f, 0.330f, 0.500f, 0.317f, 0.500f);
-//    _programs.emplace_back("School Piano",     0.450f, 0.598f, 0.626f, 0.5f, 0.603f, 0.500f, 0.174f, 0.331f, 0.330f, 0.500f, 0.421f, 0.801f);
-//    _programs.emplace_back("Broken Piano",     0.050f, 0.957f, 0.500f, 0.5f, 0.299f, 1.000f, 0.000f, 0.500f, 0.330f, 0.450f, 0.718f, 0.000f);
-//}
 
 void MDAPiano::reset() noexcept
 {
@@ -300,8 +202,8 @@ void MDAPiano::processEvents(juce::MidiBuffer& midiMessages) noexcept
 
                     default:  // all notes off
                         if (data1 > 0x7A) {
-                            // Setting the decay to 0.99 will fade out the
-                            // voice very quickly.
+                            // Setting the decay to 0.99 will fade out
+                            // the voice very quickly.
                             for (int v = 0; v < NVOICES; ++v) _voices[v].decay = 0.99f;
                             _sustain = 0;
                             _muff = 160.0f;
@@ -631,7 +533,7 @@ void MDAPiano::noteOn(int note, int velocity) noexcept
         // When the velocity sensitivity is low (closer to 0%), in MDA Piano this
         // doesn't mean that it takes less velocity to play loud notes -- it only
         // makes the dynamic range smaller, so that there isn't as much difference
-        // between low and high velocities, but doesn't it raise the floor.
+        // between low and high velocities -- but it doesn't raise the floor.
         // When the velocity sensitivity is high (closer to 100%) you can play much
         // louder (or softer). Note that the envelope can start out higher than 1.0.
         _voices[vl].env = (0.5f + _velocitySensitivity) * std::pow(0.0078f * velocity, _velocitySensitivity);
