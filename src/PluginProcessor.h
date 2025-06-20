@@ -2,7 +2,8 @@
 
 #include <JuceHeader.h>
 #include "Parameters.h"
-#include "dsp/mdaPiano.h"
+#include "dsp/mdaEPiano.h"
+//#include "dsp/mdaPiano.h"
 
 class AudioProcessor : public juce::AudioProcessor
 {
@@ -36,7 +37,8 @@ public:
 
     Parameters params;
 
-    MDAPiano piano { params };
+//    MDAPiano acousticPiano { params };
+    MDAEPiano electricPiano { params };
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioProcessor)

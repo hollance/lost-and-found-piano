@@ -53,8 +53,7 @@ private:
     RotaryKnob velocityToMufflingKnob { "Velocity", audioProcessor.apvts, ParameterID::velocityToMuffling };
 
     GroupView modulationGroup { "Modulation" };
-    RotaryKnob tremoloKnob { "Tremolo", audioProcessor.apvts, ParameterID::tremolo };
-    RotaryKnob autopanKnob { "Panning", audioProcessor.apvts, ParameterID::autopan };
+    RotaryKnob depthKnob { "Depth", audioProcessor.apvts, ParameterID::modulation };
     RotaryKnob lfoRateKnob { "Rate", audioProcessor.apvts, ParameterID::lfoRate };
 
     GroupView hardnessGroup { "Hardness" };

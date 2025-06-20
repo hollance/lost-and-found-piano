@@ -40,8 +40,7 @@ Parameters::Parameters(juce::AudioProcessorValueTreeState& apvts)
     castParameter(apvts, ParameterID::velocityToHardness, velocityToHardnessParam);
     castParameter(apvts, ParameterID::mufflingFilter, mufflingFilterParam);
     castParameter(apvts, ParameterID::velocityToMuffling, velocityToMufflingParam);
-    castParameter(apvts, ParameterID::tremolo, tremoloParam);
-    castParameter(apvts, ParameterID::autopan, autopanParam);
+    castParameter(apvts, ParameterID::modulation, modulationParam);
     castParameter(apvts, ParameterID::lfoRate, lfoRateParam);
     castParameter(apvts, ParameterID::trebleBoost, trebleBoostParam);
     castParameter(apvts, ParameterID::overdrive, overdriveParam);
@@ -150,18 +149,20 @@ juce::AudioProcessorValueTreeState::ParameterLayout Parameters::createParameterL
         juce::AudioParameterFloatAttributes().withStringFromValueFunction(stringFromPercent)));
 
     layout.add(std::make_unique<juce::AudioParameterFloat>(
-        ParameterID::tremolo,
-        "Tremolo",
-        juce::NormalisableRange<float>(0.0f, 100.0f, 1.0f),
-        0.0f,
-        juce::AudioParameterFloatAttributes().withStringFromValueFunction(stringFromPercent)));
-
-    layout.add(std::make_unique<juce::AudioParameterFloat>(
-        ParameterID::autopan,
-        "Panning",
-        juce::NormalisableRange<float>(0.0f, 100.0f, 1.0f),
-        0.0f,
-        juce::AudioParameterFloatAttributes().withStringFromValueFunction(stringFromPercent)));
+        ParameterID::modulation,
+        "Modulation",
+        juce::NormalisableRange<float>(),
+        0.5f,
+        juce::AudioParameterFloatAttributes()
+            .withStringFromValueFunction(
+                [](float value, int) {
+                   if (value > 0.5f) {
+                       return "Trem " + juce::String(int(200.0f * value - 100.0f));
+                   } else {
+                       return "Pan " + juce::String(int(100.0f - 200.0f * value));
+                    }
+                }
+            )));
 
     layout.add(std::make_unique<juce::AudioParameterFloat>(
         ParameterID::lfoRate,

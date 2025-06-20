@@ -32,8 +32,7 @@ EditorView::EditorView(AudioProcessor& p) :
     filterGroup.addAndMakeVisible(velocityToMufflingKnob);
 
     addAndMakeVisible(modulationGroup);
-    modulationGroup.addAndMakeVisible(tremoloKnob);
-    modulationGroup.addAndMakeVisible(autopanKnob);
+    modulationGroup.addAndMakeVisible(depthKnob);
     modulationGroup.addAndMakeVisible(lfoRateKnob);
 
     addAndMakeVisible(hardnessGroup);
@@ -104,31 +103,30 @@ void EditorView::resized()
     envReleaseKnob.setTopLeftPosition(envDecayKnob.getRight(), envDecayKnob.getY());
     velocitySensitivityKnob.setTopLeftPosition(envReleaseKnob.getRight(), envReleaseKnob.getY());
 
-    filterGroup.setBounds(620, 65, 270, 145);
-    mufflingFilterKnob.setTopLeftPosition(45, 50);
-    velocityToMufflingKnob.setTopLeftPosition(mufflingFilterKnob.getRight(), mufflingFilterKnob.getY());
-
-    modulationGroup.setBounds(620, 65, 270, 145);
-    tremoloKnob.setTopLeftPosition(0, 50);
-    autopanKnob.setTopLeftPosition(tremoloKnob.getRight(), tremoloKnob.getY());
-    lfoRateKnob.setTopLeftPosition(autopanKnob.getRight(), autopanKnob.getY());
-
-    hardnessGroup.setBounds(25, 240, 180, 145);
-    hardnessKnob.setTopLeftPosition(0, 50);
-    velocityToHardnessKnob.setTopLeftPosition(hardnessKnob.getRight(), hardnessKnob.getY());
-
-    effectsGroup.setBounds(225, 240, 270, 145);
+    effectsGroup.setBounds(620, 65, 270, 145);
     trebleBoostKnob.setTopLeftPosition(0, 50);
     overdriveKnob.setTopLeftPosition(trebleBoostKnob.getRight(), trebleBoostKnob.getY());
     stereoWidthKnob.setTopLeftPosition(overdriveKnob.getRight(), overdriveKnob.getY());
 
-    reverbGroup.setBounds(515, 240, 270, 145);
+    filterGroup.setBounds(40, 240, 200, 145);
+    mufflingFilterKnob.setTopLeftPosition(10, 50);
+    velocityToMufflingKnob.setTopLeftPosition(mufflingFilterKnob.getRight(), mufflingFilterKnob.getY());
+
+    modulationGroup.setBounds(40, 240, 200, 145);
+    depthKnob.setTopLeftPosition(10, 50);
+    lfoRateKnob.setTopLeftPosition(depthKnob.getRight(), depthKnob.getY());
+
+    hardnessGroup.setBounds(260, 240, 200, 145);
+    hardnessKnob.setTopLeftPosition(10, 50);
+    velocityToHardnessKnob.setTopLeftPosition(hardnessKnob.getRight(), hardnessKnob.getY());
+
+    reverbGroup.setBounds(480, 240, 270, 145);
     reverbSizeKnob.setTopLeftPosition(0, 50);
     reverbDampKnob.setTopLeftPosition(reverbSizeKnob.getRight(), reverbSizeKnob.getY());
     reverbMixKnob.setTopLeftPosition(reverbDampKnob.getRight(), reverbDampKnob.getY());
 
-    outputGroup.setBounds(810, 240, 105, 145);
-    outputLevelKnob.setTopLeftPosition(0, 50);
+    outputGroup.setBounds(770, 240, 120, 145);
+    outputLevelKnob.setTopLeftPosition(15, 50);
 
     keyboardComponent.setBounds(0, defaultHeight - 80, defaultWidth + 1, 80);
 }

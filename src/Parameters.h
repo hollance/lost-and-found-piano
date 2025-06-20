@@ -15,8 +15,7 @@ namespace ParameterID
     const juce::ParameterID velocityToHardness { "velocityToHardness", 1 };
     const juce::ParameterID mufflingFilter { "mufflingFilter", 1 };
     const juce::ParameterID velocityToMuffling { "velocityToMuffling", 1 };
-    const juce::ParameterID tremolo { "tremolo", 1 };
-    const juce::ParameterID autopan { "autopan", 1 };
+    const juce::ParameterID modulation { "modulation", 1 };
     const juce::ParameterID lfoRate { "lfoRate", 1 };
     const juce::ParameterID trebleBoost { "trebleBoost", 1 };
     const juce::ParameterID overdrive { "overdrive", 1 };
@@ -58,8 +57,7 @@ public:
     juce::AudioParameterFloat* velocityToHardnessParam;
     juce::AudioParameterFloat* mufflingFilterParam;
     juce::AudioParameterFloat* velocityToMufflingParam;
-    juce::AudioParameterFloat* tremoloParam;
-    juce::AudioParameterFloat* autopanParam;
+    juce::AudioParameterFloat* modulationParam;
     juce::AudioParameterFloat* lfoRateParam;
     juce::AudioParameterFloat* trebleBoostParam;
     juce::AudioParameterFloat* overdriveParam;
