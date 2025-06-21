@@ -1,6 +1,6 @@
 #pragma once
 
-const int NVOICES = 128;  // max polyphony
+const int NVOICES = 64;  // max polyphony
 
 const float SILENCE = 0.0001f;  // voice choking
 
