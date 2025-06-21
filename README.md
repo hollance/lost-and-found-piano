@@ -1,10 +1,10 @@
 # Lost N' Found Piano
 
-This is the source code for **Lost N' Found Piano**, a virtual instrument plug-in that combines the classic mdaPiano and mdaEPiano VSTs in a new skin.
+This is the source code for **Lost N' Found Piano**, a virtual instrument plug-in that combines updated versions of the classic **mda Piano** and **mda EPiano** VSTs and gives them a new coat of paint.
 
-![](TODO:picture)
+![](images/Screenshot.png)
 
-mdaPiano is an acoustic piano instrument, mdaEPiano is a Rhodes piano. Both were quite popular free synths back in the early 2000s. The reverb is from another classic MDA plug-in, mdaAmbience.
+mdaPiano is a sampled acoustic piano, mdaEPiano is a Rhodes electric piano. Both were quite popular free virtual instruments back in the early 2000s. The reverb effect is from **mda Ambience**.
 
 **Lost N' Found Piano** mostly exists for nostalgic reasons and because the old VSTs don't work very well on modern computers anymore. It may not be the best sounding piano in the world, but it's still fun to play!
 
@@ -21,17 +21,27 @@ On Mac:
 
 On Windows:
 
+- sorry, the Windows build is not available yet
+
+<!--
 - copy **Lost N' Found Piano.vst3** to the folder **C:\Program Files\Common Files\VST3**
+-->
 
 In your DAW, look for **Lost N' Found > Piano**. You can insert this plug-in on an instrument track.
 
-Mac users: If the plug-in does not appear in your DAW, go to **Applications/Utilities/Terminal** and type `killall -9 AudioComponentRegistrar` on a single line, followed by the Enter key. Then restart your DAW.
+Mac users: If the AU version of the plug-in does not appear in your DAW, go to **Applications/Utilities/Terminal** and type `killall -9 AudioComponentRegistrar` on a single line and press enter. Then restart your DAW.
 
-## How to use
+Refer to **UserGuide.pdf** for usage instructions.
 
-TODO
+## Known limitations
 
-## How to build the plug-in
+- None of the original factory presets are included yet.
+- The window size is not remembered when you close the plug-in.
+- The parameters are not smoothed, so changing them when sound is playing will produce zipper noise.
+- These plug-ins were designed for a sample rate of 44.1 kHz. Other sample rates may not work very well.
+- There is currently no Windows version.
+
+## Building from source code
 
 **Lost N' Found Piano** is written using C++ and JUCE 8.
 
