@@ -184,9 +184,15 @@ void MDAEPiano::update() noexcept
     float param10 = _params.randomDetuningParam->get();
     _random = 0.077f * param10 * param10;
 
+    // The UI shows -50 to +50 cents. Convert this into -0.000217 to +0.000217.
+    // This will be turned into (a fraction of) semitones later.
+    // Note: This feature was not present in the original EPiano.
+    float param11 = _params.stretchTuningParam->get();
+    param11 = (param11 + 50.0f) / 100.0f;  // first to 0 - 1
+    _stretch = 0.000434f * (param11 - 0.5f);
+
     // Overdrive: The UI shows 0% to 100%. Convert this into 0 - 1.8.
-    float param11 = _params.overdriveParam->get() / 100.0f;
-    _overdrive = 1.8f * param11;
+    _overdrive = 1.8f * _params.overdriveParam->get() / 100.0f;
 }
 
 void MDAEPiano::processEvents(juce::MidiBuffer& midiMessages) noexcept
@@ -492,6 +498,15 @@ void MDAEPiano::noteOn(int note, int velocity) noexcept
         // Add the fine-tuning amount. Note that `l` is in semitones. Both the fine
         // and random tuning are in fractions of a semitone.
         float l = _fine + r;
+
+        // For notes higher than middle C, add stretch tuning. This formula gently
+        // curves upward so that higher notes are pitched slightly up from normal,
+        // or downward so that higher notes are pitched down. The further the note
+        // is away from C4, the more it's detuned up or down. Since _stretch is a
+        // very small number, the highest notes will at most be pitched up/down by
+        // ±50 cents (although very high notes outside of the normal piano range
+        // will actually be detuned more).
+        if (note > 60) l += _stretch * float(k);
 
         // Next, we need to determine which waveform to use for this note. That is
         // described by the keygroups. The Hardness Offset parameter can be used to

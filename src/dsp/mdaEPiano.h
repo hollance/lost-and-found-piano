@@ -97,6 +97,9 @@ private:
     // Amount of random detuning.
     float _random;
 
+    // Amount of stretch tuning.
+    float _stretch;
+
     // For calculating the stereo width.
     float _width;
 
