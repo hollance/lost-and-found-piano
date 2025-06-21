@@ -65,6 +65,7 @@ endif()
 
 juce_add_plugin(${PROJECT_NAME}
     COMPANY_NAME "Lost N' Found"
+    PLUGIN_NAME "Piano"
     PLUGIN_MANUFACTURER_CODE Dvbl
     PLUGIN_CODE Lafp
     BUNDLE_ID "blog.audiodev.lostandfound.piano"

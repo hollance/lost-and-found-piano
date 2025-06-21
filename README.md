@@ -23,7 +23,7 @@ On Windows:
 
 - copy **Lost N' Found Piano.vst3** to the folder **C:\Program Files\Common Files\VST3**
 
-In your DAW, look for **Lost N' Found > Lost N' Found Piano**. You can insert this plug-in on an instrument track.
+In your DAW, look for **Lost N' Found > Piano**. You can insert this plug-in on an instrument track.
 
 Mac users: If the plug-in does not appear in your DAW, go to **Applications/Utilities/Terminal** and type `killall -9 AudioComponentRegistrar` on a single line, followed by the Enter key. Then restart your DAW.
 
