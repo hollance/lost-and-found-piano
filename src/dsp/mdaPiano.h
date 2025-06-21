@@ -76,6 +76,13 @@ private:
     int _hardnessOffset;
     float _hardnessVelocity;
 
+    // Settings for the treble boost filter.
+    float _trebleGain;
+    float _filtCoef;
+
+    // Delay units for the treble boost filter.
+    float _filtL, _filtR;
+
     // Used to set the envelope level for new notes. Value between 0.25 and 3.0.
     float _velocitySensitivity;
 

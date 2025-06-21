@@ -58,6 +58,9 @@ void MDAPiano::reset() noexcept
     _muff = 160.0f;
     _sustain = 0;
 
+    // Zero out the filter delay units.
+    _filtL = _filtR = 0.0f;
+
     // Empty the delay for the comb filter.
     _delayPos = 0;
     memset(_combDelay, 0, sizeof(float) * 256);
@@ -86,8 +89,22 @@ void MDAPiano::update() noexcept
 
     // Velocity to Hardness: The UI shows 0% to 100%. Convert to 0.0 - 0.12.
     // Used in addition to the Hardness Offset for changing the keygroup.
-    float param3 = _params.velocityToHardnessParam->get();
-    _hardnessVelocity = 0.12f * param3 / 100.0f;
+    _hardnessVelocity = 0.12f * _params.velocityToHardnessParam->get() / 100.0f;
+
+    // Treble Boost: The UI shows -50% to +50%. When negative, this acts as a
+    // low-shelf filter that suppresses the high frequencies. When positive,
+    // this is a high-shelf filter that boosts the high frequencies.
+    // Note: This feature was not present in the original MDA Piano.
+    float param3 = _params.trebleBoostParam->get();
+    param3 = (param3 + 50.0f) / 100.0f;           // first to 0 - 1
+    _trebleGain = 4.0f * param3 * param3 - 1.0f;  // -1 ... +3
+
+    // The treble boost consists of a basic low-pass filter. Here, we calculate
+    // the coefficient for that filter. It either has a cutoff of about 794 Hz
+    // (slider to the left) or 2241 Hz (slider to the right). Note that the code
+    // says 14000 or 5000 but that includes an extra factor 2pi.
+    if (param3 > 0.5f) _filtCoef = 14000.0f; else _filtCoef = 5000.0f;
+    _filtCoef = 1.0f - std::exp(-_inverseSampleRate * _filtCoef);
 
     // Muffling Filter: The UI shows this as a percentage, so divide by 100.
     float param4 = _params.mufflingFilterParam->get();
@@ -350,6 +367,21 @@ void MDAPiano::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& 
                 V++;
             }
 
+            // Treble boost. This happens in 2 steps: First there is a basic low-pass
+            // filter with the difference equation y(n) = f*x(n) + (1 - f)*y(n - 1).
+            // The left and right channels have their own instance of this filter.
+            _filtL += _filtCoef * (l - _filtL);
+            _filtR += _filtCoef * (r - _filtR);
+
+            // Next, we subtract the low-pass filtered signal from the original signal,
+            // which leaves only the high / treble frequencies. Then, depending on
+            // whether the Treble Boost setting is + or -, we add or subtract these
+            // high frequencies using the "treble gain" factor. This creates a shelf:
+            // by subtracting the high freqs, we remove the high end (obviously).
+            // But when we add the high frequencies, the high end gets boosted.
+            l += _trebleGain * (l - _filtL);
+            r += _trebleGain * (r - _filtR);
+
             // When you sum a signal with a delayed version, you get a comb filter.
             // This filter boosts frequencies that are a multiple of the delay length
             // and suppresses other frequencies. To get a wider stereo field, we can
@@ -372,6 +404,10 @@ void MDAPiano::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& 
             noteOn(note, vel);
         }
     }
+
+    // Handle floating point underflow.
+    if (std::fabs(_filtL) < 1.0e-10f) _filtL = 0.0f;
+    if (std::fabs(_filtR) < 1.0e-10f) _filtR = 0.0f;
 
     // Turn off voices whose envelope has dropped below the minimum level.
     for (int v = 0; v < _numActiveVoices; ++v) {
