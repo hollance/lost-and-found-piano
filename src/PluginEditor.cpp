@@ -26,6 +26,7 @@ AudioProcessorEditor::~AudioProcessorEditor()
 
 void AudioProcessorEditor::paint([[maybe_unused]] juce::Graphics& g)
 {
+    // do nothing
 }
 
 void AudioProcessorEditor::resized()

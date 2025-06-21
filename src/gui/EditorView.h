@@ -68,7 +68,7 @@ private:
     GroupView reverbGroup { "Reverb" };
     RotaryKnob reverbSizeKnob { "Size", audioProcessor.apvts, ParameterID::reverbSize };
     RotaryKnob reverbDampKnob { "Damp", audioProcessor.apvts, ParameterID::reverbDamp };
-    RotaryKnob reverbMixKnob { "Dry/Wet", audioProcessor.apvts, ParameterID::reverbMix };
+    RotaryKnob reverbMixKnob { "Mix", audioProcessor.apvts, ParameterID::reverbMix };
 
     GroupView outputGroup { "Out" };
     RotaryKnob outputLevelKnob { "Level", audioProcessor.apvts, ParameterID::outputLevel };
