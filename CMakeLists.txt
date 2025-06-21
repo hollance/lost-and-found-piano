@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
+include (FetchContent)
 
 set(CMAKE_OSX_DEPLOYMENT_TARGET "10.13" CACHE STRING "Minimum OS X deployment target")
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
@@ -6,12 +7,19 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 project(LostAndFoundPiano VERSION 1.0.0)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS YES)
-option(JUCE_ENABLE_MODULE_SOURCE_GROUPS "Enable Module Source Groups" ON)
-
-find_package(JUCE CONFIG REQUIRED)
 
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD 20)
+
+FetchContent_Declare(
+    JUCE
+    GIT_REPOSITORY https://github.com/juce-framework/JUCE.git
+    GIT_TAG d6181bde38d858c283c3b7bf699ce6340c050b5d
+    GIT_PROGRESS TRUE
+    GIT_SHALLOW 1
+)
+
+FetchContent_MakeAvailable(JUCE)
 
 # generate PDB/dSYM files for the Release build
 if(MSVC)
@@ -28,7 +36,7 @@ endif()
 
 if(MSVC)
 add_compile_options("/W4")
-else()
+elseif(APPLE)
 add_compile_options(
     -Wall
     -Wbool-conversion
@@ -69,13 +77,14 @@ juce_add_plugin(${PROJECT_NAME}
     PLUGIN_MANUFACTURER_CODE Dvbl
     PLUGIN_CODE Lafp
     BUNDLE_ID "blog.audiodev.lostandfound.piano"
+    LV2URI "urn://blog.audiodev.lostandfound.piano"
     IS_SYNTH TRUE
     NEEDS_MIDI_INPUT TRUE
     NEEDS_MIDI_OUTPUT FALSE
     IS_MIDI_EFFECT FALSE
     EDITOR_WANTS_KEYBOARD_FOCUS FALSE
     COPY_PLUGIN_AFTER_BUILD TRUE
-    FORMATS AU VST3
+    FORMATS AU VST3 LV2 Standalone
     PRODUCT_NAME "Lost N' Found Piano"
 )
 
