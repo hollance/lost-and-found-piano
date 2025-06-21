@@ -7,6 +7,7 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 project(LostAndFoundPiano VERSION 1.0.0)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS YES)
+option(JUCE_ENABLE_MODULE_SOURCE_GROUPS "Enable Module Source Groups" ON)
 
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD 20)
@@ -14,7 +15,6 @@ set(CMAKE_CXX_STANDARD 20)
 FetchContent_Declare(
     JUCE
     GIT_REPOSITORY https://github.com/juce-framework/JUCE.git
-    GIT_TAG d6181bde38d858c283c3b7bf699ce6340c050b5d
     GIT_PROGRESS TRUE
     GIT_SHALLOW 1
 )
@@ -36,15 +36,25 @@ endif()
 
 if(MSVC)
 add_compile_options("/W4")
-elseif(APPLE)
+else(APPLE AND LINUX)
 add_compile_options(
     -Wall
-    -Wbool-conversion
     -Wcast-align
-    -Wconditional-uninitialized
-    -Wconstant-conversion
     -Wconversion
     -Wdeprecated
+    -Wpedantic
+    -Wswitch-enum
+    -Wuninitialized
+    -Wunused-parameter
+    -Wzero-as-null-pointer-constant
+)
+endif()
+
+if(APPLE)
+add_compile_options(
+    -Wbool-conversion
+    -Wconditional-uninitialized
+    -Wconstant-conversion
     -Wextra-semi
     -Wno-float-equal
     -Winconsistent-missing-destructor-override
@@ -53,21 +63,17 @@ add_compile_options(
     -Wmissing-prototypes
     -Wno-ignored-qualifiers
     -Wnullable-to-nonnull-conversion
-    -Woverloaded-virtual
-    -Wpedantic
-    -Wreorder
+    # -Woverloaded-virtual
+    # -Wreorder
     -Wshadow-all
     -Wshift-sign-overflow
     -Wshorten-64-to-32
-    -Wsign-compare
+    # -Wsign-compare
     -Wno-sign-conversion
     -Wstrict-aliasing
-    -Wswitch-enum
-    -Wuninitialized
     -Wunreachable-code
-    -Wunused-parameter
     -Wunused-private-field
-    -Wzero-as-null-pointer-constant
+
 )
 endif()
 
