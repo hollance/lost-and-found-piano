@@ -91,6 +91,9 @@ private:
     // For calculating the stereo width.
     float _width, _trim;
 
+    // Amount of overdrive.
+    float _overdrive;
+
     // Delay line for comb filter. Used to enhance the stereo width.
     int _delayPos;
     int _delayMax;

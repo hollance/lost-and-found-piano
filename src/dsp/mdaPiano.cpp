@@ -134,6 +134,10 @@ void MDAPiano::update() noexcept
     float param11 = _params.stretchTuningParam->get();
     param11 = (param11 + 50.0f) / 100.0f;  // first to 0 - 1
     _stretch = 0.000434f * (param11 - 0.5f);
+
+    // Overdrive: The UI shows 0% to 100%. Convert this into 0 - 1.8.
+    // Note: This feature was not present in the original MDA Piano.
+    _overdrive = 1.8f * _params.overdriveParam->get() / 100.0f;
 }
 
 void MDAPiano::processEvents(juce::MidiBuffer& midiMessages) noexcept
@@ -298,6 +302,15 @@ void MDAPiano::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& 
                 // Update the envelope. Multiplying by a decay value that is less than
                 // 1.0 gives this an exponentially decaying curve.
                 V->env = V->env * V->decay;
+
+                // Simple distortion effect. For samples that are positive, subtract
+                // the square of that sample times the overdrive factor, which can be
+                // larger than 1. This "flattens" the top of the waveform. The louder
+                // you play, the more extreme the distortion is.
+                if (x > 0.0f) {
+                    x -= _overdrive * x * x;
+                    if (x < -V->env) x = -V->env;   // but not too extreme!
+                }
 
                 // Apply the muffle filter. This is a gentle first-order low-pass
                 // filter with the difference equation:

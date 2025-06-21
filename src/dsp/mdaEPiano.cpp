@@ -130,7 +130,7 @@ void MDAEPiano::update() noexcept
 
     // Velocity to Hardness: The UI shows 0% to 100%. Convert to 0.0 - 0.12.
     // Used in addition to the Hardness Offset for changing the keygroup.
-    // Note: This feature was not present in the original EPiano.
+    // Note: This feature was not present in the original MDA EPiano.
     _hardnessVelocity = 0.12f * _params.velocityToHardnessParam->get() / 100.0f;
 
     // Treble Boost: The UI shows -50% to +50%. When negative, this acts as a
@@ -186,7 +186,7 @@ void MDAEPiano::update() noexcept
 
     // The UI shows -50 to +50 cents. Convert this into -0.000217 to +0.000217.
     // This will be turned into (a fraction of) semitones later.
-    // Note: This feature was not present in the original EPiano.
+    // Note: This feature was not present in the original MDA EPiano.
     float param11 = _params.stretchTuningParam->get();
     param11 = (param11 + 50.0f) / 100.0f;  // first to 0 - 1
     _stretch = 0.000434f * (param11 - 0.5f);
@@ -291,7 +291,6 @@ void MDAEPiano::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&
     processEvents(midiMessages);
 
     const int sampleFrames = buffer.getNumSamples();
-    const float overdrive = _overdrive;
 
     float *out0 = buffer.getWritePointer(0);
     float *out1 = buffer.getWritePointer(1);
@@ -368,7 +367,7 @@ void MDAEPiano::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&
                 // larger than 1. This "flattens" the top of the waveform. The louder
                 // you play, the more extreme the distortion is.
                 if (x > 0.0f) {
-                    x -= overdrive * x * x;
+                    x -= _overdrive * x * x;
                     if (x < -V->env) x = -V->env;   // but not too extreme!
                 }
 
