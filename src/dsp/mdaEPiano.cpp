@@ -128,6 +128,11 @@ void MDAEPiano::update() noexcept
     param2 = (param2 + 50.0f) / 100.0f;  // first to 0 - 1
     _hardnessOffset = int(12.0f * param2 - 6.0f);
 
+    // Velocity to Hardness: The UI shows 0% to 100%. Convert to 0.0 - 0.12.
+    // Used in addition to the Hardness Offset for changing the keygroup.
+    // Note: This feature was not present in the original EPiano.
+    _hardnessVelocity = 0.12f * _params.velocityToHardnessParam->get() / 100.0f;
+
     // Treble Boost: The UI shows -50% to +50%. When negative, this acts as a
     // low-shelf filter that suppresses the high frequencies. When positive,
     // this is a high-shelf filter that boosts the high frequencies.
@@ -490,10 +495,12 @@ void MDAEPiano::noteOn(int note, int velocity) noexcept
 
         // Next, we need to determine which waveform to use for this note. That is
         // described by the keygroups. The Hardness Offset parameter can be used to
-        // tweak this, so that notes sound duller or brighter. (MDA Piano also has
-        // a velocity-to-hardness setting so that loud notes sound brighter, but
-        // EPiano does not.)
+        // tweak this, so that notes sound duller or brighter.
         int s = _hardnessOffset;
+
+        // High velocity can increment this value even more, so that loud notes
+        // sound brighter (which is what happens on a real piano).
+        if (velocity > 40) s += int(_hardnessVelocity * float(velocity - 40));
 
         // What keygroup is this note in? We effectively subtract the "hardness" s
         // from the note number, so if `s` is positive (more hardness), we pretend

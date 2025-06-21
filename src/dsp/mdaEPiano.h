@@ -61,9 +61,10 @@ private:
     // note off event (if the sustain pedal is not pressed).
     float _envRelease;
 
-    // This changes which waveform to use for a given note, by not selecting
-    // the note's own keygroup but one of its neighboring keygroups.
+    // These two settings change which waveform to use for a given note, by not
+    // selecting the note's keygroup but one of its neighboring keygroups.
     int _hardnessOffset;
+    float _hardnessVelocity;
 
     // Settings for the treble boost filter.
     float _trebleGain;
