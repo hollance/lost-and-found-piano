@@ -56,6 +56,8 @@ EditorView::EditorView(AudioProcessor& p) :
 
     updateUI();
 
+    animatorUpdater.addAnimator(animator);
+
     audioProcessor.params.instrumentParam->addListener(this);
 }
 
@@ -143,10 +145,6 @@ void EditorView::parameterValueChanged(int, float)
     filterGroup.setAlpha(0.0f);
     modulationGroup.setAlpha(0.0f);
 
-    animatorUpdater.addAnimator(animator, [this]
-    {
-        animatorUpdater.removeAnimator(animator);
-    });
     animator.start();
 }
 

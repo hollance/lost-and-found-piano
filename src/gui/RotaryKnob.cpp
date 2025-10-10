@@ -46,6 +46,8 @@ RotaryKnob::RotaryKnob(const juce::String& text,
     {
         startTimer(500.0f);
     };
+
+    animatorUpdater.addAnimator(animator);
 }
 
 RotaryKnob::~RotaryKnob()
@@ -73,8 +75,6 @@ void RotaryKnob::timerCallback()
 
 void RotaryKnob::showValueLabel()
 {
-    animatorUpdater.removeAnimator(animator);
-
     nameLabel.setVisible(false);
     nameLabel.setAlpha(1.0f);
 
@@ -85,12 +85,6 @@ void RotaryKnob::showValueLabel()
 void RotaryKnob::hideValueLabel()
 {
     nameLabel.setVisible(true);
-
-    animatorUpdater.addAnimator(animator, [this]
-    {
-        animatorUpdater.removeAnimator(animator);
-    });
-
     animator.start();
 }
 
