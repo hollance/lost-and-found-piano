@@ -1,4 +1,5 @@
 **/.DS_Store
-**/build
-**/*.filtergraph
+build
+build-lint
+build-release
 
