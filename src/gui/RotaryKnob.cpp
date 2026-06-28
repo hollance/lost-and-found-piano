@@ -32,6 +32,7 @@ RotaryKnob::RotaryKnob(juce::String text,
 
     slider.onDragStart = [this]()
     {
+        animatorUpdater.removeAnimator(animator);
         showValueLabel();
         updateValueLabel();
         stopTimer();
@@ -47,7 +48,6 @@ RotaryKnob::RotaryKnob(juce::String text,
         startTimer(500.0f);
     };
 
-    animatorUpdater.addAnimator(animator);
 }
 
 RotaryKnob::~RotaryKnob()
@@ -61,10 +61,6 @@ void RotaryKnob::paint([[maybe_unused]] juce::Graphics& g)
 //    g.drawRect(getLocalBounds());
 //    g.setColour(juce::Colours::teal);
 //    g.drawRect(nameLabel.getBounds());
-}
-
-void RotaryKnob::resized()
-{
 }
 
 void RotaryKnob::timerCallback()
@@ -85,6 +81,8 @@ void RotaryKnob::showValueLabel()
 void RotaryKnob::hideValueLabel()
 {
     nameLabel.setVisible(true);
+
+    animatorUpdater.addAnimator(animator);
     animator.start();
 }
 
