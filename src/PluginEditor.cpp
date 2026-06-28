@@ -2,7 +2,7 @@
 #include "PluginEditor.h"
 
 AudioProcessorEditor::AudioProcessorEditor(AudioProcessor& p)
-    : juce::AudioProcessorEditor(&p), audioProcessor(p), editorView(p)
+    : juce::AudioProcessorEditor(&p), editorView(p)
 {
     setOpaque(true);
     setLookAndFeel(&lf);
@@ -31,6 +31,6 @@ void AudioProcessorEditor::paint([[maybe_unused]] juce::Graphics& g)
 
 void AudioProcessorEditor::resized()
 {
-    float scale = getWidth() / float(defaultWidth);
+    auto scale = float(getWidth()) / float(defaultWidth);
     editorView.setTransform(juce::AffineTransform::scale(scale));
 }

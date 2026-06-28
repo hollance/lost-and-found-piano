@@ -1,5 +1,5 @@
-#include "MidiKeyboardComponent.h"
-#include "LookAndFeel.h"
+#include "gui/LookAndFeel.h"
+#include "gui/MidiKeyboardComponent.h"
 
 MidiKeyboardComponent::MidiKeyboardComponent(juce::MidiKeyboardState& state,
                                              juce::MidiKeyboardComponent::Orientation orientation)

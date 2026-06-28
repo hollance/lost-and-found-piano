@@ -1,8 +1,8 @@
 #pragma once
 
+#include "Parameters.h"
+#include "dsp/SharedDefs.h"
 #include <JuceHeader.h>
-#include "../Parameters.h"
-#include "SharedDefs.h"
 
 class MDAPiano
 {
@@ -37,7 +37,7 @@ private:
     const int SUSTAIN = 128;
 
     // Big lookup table with waveforms containing the piano samples.
-    short *_waves;
+    const short *_waves;
 
     // Maps the waveforms from the _waves lookup table to ranges of notes.
     Keygroup _keygroups[15];

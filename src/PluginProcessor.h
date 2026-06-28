@@ -1,10 +1,10 @@
 #pragma once
 
-#include <JuceHeader.h>
 #include "Parameters.h"
 #include "dsp/mdaAmbience.h"
 #include "dsp/mdaEPiano.h"
 #include "dsp/mdaPiano.h"
+#include <JuceHeader.h>
 
 class AudioProcessor : public juce::AudioProcessor
 {

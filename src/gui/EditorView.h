@@ -1,13 +1,13 @@
 #pragma once
 
+#include "PluginProcessor.h"
+#include "gui/GroupView.h"
+#include "gui/LookAndFeel.h"
+#include "gui/MidiKeyboardComponent.h"
+#include "gui/RadioButtonAttachment.h"
+#include "gui/RotaryKnob.h"
+#include "gui/SelectionBar.h"
 #include <JuceHeader.h>
-#include "../PluginProcessor.h"
-#include "GroupView.h"
-#include "LookAndFeel.h"
-#include "MidiKeyboardComponent.h"
-#include "RadioButtonAttachment.h"
-#include "RotaryKnob.h"
-#include "SelectionBar.h"
 
 // The width is 52 white piano keys times 18 pixels, minus one pixel.
 static constexpr int defaultWidth = 935;
@@ -82,10 +82,10 @@ private:
         .withDurationMs(300.0)
         .withValueChangedCallback([this](auto value) {
             if (audioProcessor.params.isAcoustic()) {
-                float dx = (electricButton.getX() - acousticButton.getX()) * (1.0f - value);
+                float dx = float(electricButton.getX() - acousticButton.getX()) * (1.0f - value);
                 selectionBar.setTransform(juce::AffineTransform::translation(dx, 0.0f));
             } else {
-                float dx = (electricButton.getX() - acousticButton.getX()) * (value - 1.0f);
+                float dx = float(electricButton.getX() - acousticButton.getX()) * (value - 1.0f);
                 selectionBar.setTransform(juce::AffineTransform::translation(dx, 0.0f));
             }
         })

@@ -1,12 +1,12 @@
 #pragma once
 
+#include "gui/LookAndFeel.h"
 #include <JuceHeader.h>
-#include "LookAndFeel.h"
 
 class GroupView : public juce::Component
 {
 public:
-    GroupView(const juce::String& name) : groupName(name) { }
+    GroupView(juce::String name) : groupName(std::move(name)) { }
 
     void paint(juce::Graphics& g) override
     {

@@ -2,19 +2,21 @@
 
 #include <JuceHeader.h>
 
-namespace Colors
-{
-    const juce::Colour background { 0xff1f252a };
-    const juce::Colour accent1 { 0xffde4949 };
-    const juce::Colour accent2 { 0xff93de49 };
-    const juce::Colour text { 0xffc8c0c0 };
-}
+namespace Colors {
 
-namespace Fonts
-{
-    juce::Font getRegularFont(float height = 24.0f);
-    juce::Font getMonoFont(float height = 20.0f);
-}
+const juce::Colour background { 0xff1f252a };
+const juce::Colour accent1 { 0xffde4949 };
+const juce::Colour accent2 { 0xff93de49 };
+const juce::Colour text { 0xffc8c0c0 };
+
+}  // namespace Colors
+
+namespace Fonts {
+
+juce::Font getRegularFont(float height = 24.0f);
+juce::Font getMonoFont(float height = 20.0f);
+
+}  // namespace Fonts
 
 class LookAndFeel : public juce::LookAndFeel_V4
 {

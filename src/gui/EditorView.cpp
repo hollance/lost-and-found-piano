@@ -1,4 +1,4 @@
-#include "EditorView.h"
+#include "gui/EditorView.h"
 
 EditorView::EditorView(AudioProcessor& p) :
     audioProcessor(p),

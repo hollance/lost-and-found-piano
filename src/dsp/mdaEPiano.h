@@ -1,13 +1,14 @@
 #pragma once
 
+#include "Parameters.h"
+#include "dsp/SharedDefs.h"
 #include <JuceHeader.h>
-#include "../Parameters.h"
-#include "SharedDefs.h"
 
 class MDAEPiano
 {
 public:
     MDAEPiano(Parameters& params);
+    ~MDAEPiano();
 
     void prepareToPlay(double sampleRate) noexcept;
     void reset() noexcept;

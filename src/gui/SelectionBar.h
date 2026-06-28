@@ -1,7 +1,7 @@
 #pragma once
 
+#include "gui/LookAndFeel.h"
 #include <JuceHeader.h>
-#include "LookAndFeel.h"
 
 class SelectionBar : public juce::Component
 {
@@ -13,7 +13,7 @@ public:
 
     void paint(juce::Graphics& g) override
     {
-        auto bounds = getLocalBounds();
+        auto bounds = getLocalBounds().toFloat();
         juce::Path path;
         path.addRoundedRectangle(bounds.getX(), bounds.getBottom() - 5.0f, bounds.getWidth(),
                                  5.0f, 3, 3, true, true, false, false);

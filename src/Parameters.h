@@ -2,8 +2,8 @@
 
 #include <JuceHeader.h>
 
-namespace ParameterID
-{
+namespace ParameterID {
+
     const juce::ParameterID instrument { "instrument", 1 };
     const juce::ParameterID fineTuning { "fineTuning", 1 };
     const juce::ParameterID randomDetuning { "randomDetuning", 1 };
@@ -24,7 +24,8 @@ namespace ParameterID
     const juce::ParameterID reverbDamp { "reverbDamp", 1 };
     const juce::ParameterID reverbMix { "reverbMix", 1 };
     const juce::ParameterID outputLevel { "outputLevel", 1 };
-}
+
+}  // namespace ParameterID
 
 class Parameters
 {

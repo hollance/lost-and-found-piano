@@ -1,22 +1,23 @@
-#include "LookAndFeel.h"
 #include "BinaryData.h"
+#include "gui/LookAndFeel.h"
 
 namespace Fonts
 {
-static const juce::Typeface::Ptr typefaceRegular = juce::Typeface::createSystemTypefaceFor(
-    BinaryData::GoudyBookletter1911_otf, BinaryData::GoudyBookletter1911_otfSize);
-
-static const juce::Typeface::Ptr typefaceMono = juce::Typeface::createSystemTypefaceFor(
-    BinaryData::VictorMonoRegular_ttf, BinaryData::VictorMonoRegular_ttfSize);
 
 juce::Font getRegularFont(float height)
 {
-    return juce::Font(juce::FontOptions(typefaceRegular).withHeight(height));
+    static juce::Typeface::Ptr typefaceRegular = juce::Typeface::createSystemTypefaceFor(
+                BinaryData::GoudyBookletter1911_otf, BinaryData::GoudyBookletter1911_otfSize);
+
+    return { juce::FontOptions(typefaceRegular).withHeight(height) };
 }
 
 juce::Font getMonoFont(float height)
 {
-    return juce::Font(juce::FontOptions(typefaceMono).withHeight(height));
+    static juce::Typeface::Ptr typefaceMono = juce::Typeface::createSystemTypefaceFor(
+                BinaryData::VictorMonoRegular_ttf, BinaryData::VictorMonoRegular_ttfSize);
+
+    return { juce::FontOptions(typefaceMono).withHeight(height) };
 }
 
 }  // namespace Fonts
@@ -37,9 +38,9 @@ void LookAndFeel::drawCornerResizer(
     [[maybe_unused]] bool isMouseDragging)
 {
     juce::Path path;
-    path.startNewSubPath(4.0f, h - 3.0f);
-    path.lineTo(w - 3.0f, h - 3.0f);
-    path.lineTo(w - 3.0f, 4.0f);
+    path.startNewSubPath(4.0f, float(h) - 3.0f);
+    path.lineTo(float(w) - 3.0f, float(h) - 3.0f);
+    path.lineTo(float(w) - 3.0f, 4.0f);
     path.closeSubPath();
 
     g.setColour(juce::Colour(0xff1d1c1a).brighter());
@@ -57,8 +58,8 @@ void LookAndFeel::drawRotarySlider(
      float rotaryEndAngle,
      [[maybe_unused]] juce::Slider& slider)
 {
-    auto knobRect = juce::Rectangle<float>(x + (width - 60.0f) / 2.0f, y, 60.0f, 60.0f);
-    auto shadowRect = juce::Rectangle<float>(x + (width - 48.0f) / 2.0f, y + 12.0f, 48.0f, 48.0f);
+    auto knobRect = juce::Rectangle<float>(float(x) + float(width - 60) / 2.0f, float(y), 60.0f, 60.0f);
+    auto shadowRect = juce::Rectangle<float>(float(x) + float(width - 48) / 2.0f, float(y) + 12.0f, 48.0f, 48.0f);
 
     auto path = juce::Path();
     path.addEllipse(shadowRect);

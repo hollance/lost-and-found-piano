@@ -1,8 +1,8 @@
-#include "RadioButtonAttachment.h"
+#include "gui/RadioButtonAttachment.h"
 
 RadioButtonAttachment::RadioButtonAttachment(juce::AudioProcessorValueTreeState& stateToUse,
                                              const juce::String& parameterID,
-                                             const std::vector<juce::Button*> paramButtons)
+                                             const std::vector<juce::Button*>& paramButtons)
     : buttons(paramButtons),
       parameter(*stateToUse.getParameter(parameterID)),
       attachment(parameter, [this] (float f) { setValue(f); })
@@ -42,8 +42,7 @@ void RadioButtonAttachment::setValue(float newValue)
 
 void RadioButtonAttachment::buttonClicked(juce::Button* button)
 {
-    if (ignoreCallbacks)
-        return;
+    if (ignoreCallbacks) { return; }
 
     if (!button->getToggleState()) {
          button->setToggleState(true, juce::dontSendNotification);

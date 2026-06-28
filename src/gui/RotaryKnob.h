@@ -1,12 +1,12 @@
 #pragma once
 
+#include "gui/LookAndFeel.h"
 #include <JuceHeader.h>
-#include "LookAndFeel.h"
 
 class RotaryKnob : public juce::Component, private juce::Timer
 {
 public:
-    RotaryKnob(const juce::String& text,
+    RotaryKnob(juce::String text,
                juce::AudioProcessorValueTreeState& apvts,
                const juce::ParameterID& parameterID);
 

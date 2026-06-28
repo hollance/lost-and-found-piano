@@ -1,7 +1,7 @@
 #pragma once
 
+#include "Parameters.h"
 #include <JuceHeader.h>
-#include "../Parameters.h"
 
 class MDAAmbience
 {

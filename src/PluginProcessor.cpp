@@ -16,7 +16,7 @@ bool AudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
 
 void AudioProcessor::prepareToPlay(double sampleRate, [[maybe_unused]] int maximumBlockSize)
 {
-    float synthRate = float(sampleRate);
+    auto synthRate = float(sampleRate);
     params.prepareToPlay(synthRate);
     acousticPiano.prepareToPlay(sampleRate);
     electricPiano.prepareToPlay(sampleRate);

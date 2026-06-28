@@ -12,7 +12,7 @@ static juce::String stringFromPercent(float value, int)
 
 static juce::String cents()
 {
-    return juce::String(juce::CharPointer_UTF8(" ¢"));
+    return { juce::CharPointer_UTF8(" ¢") };
 }
 
 static juce::String stringFromCents(float value, int)
@@ -21,7 +21,7 @@ static juce::String stringFromCents(float value, int)
 }
 
 template<typename T>
-inline void castParameter(juce::AudioProcessorValueTreeState& apvts, const juce::ParameterID& id, T& destination)
+inline static void castParameter(juce::AudioProcessorValueTreeState& apvts, const juce::ParameterID& id, T& destination)
 {
     destination = dynamic_cast<T>(apvts.getParameter(id.getParamID()));
     jassert(destination);  // parameter does not exist or wrong type

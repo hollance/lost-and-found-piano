@@ -1,9 +1,9 @@
 #pragma once
 
-#include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "gui/EditorView.h"
 #include "gui/LookAndFeel.h"
+#include <JuceHeader.h>
 
 class AudioProcessorEditor : public juce::AudioProcessorEditor
 {
@@ -15,7 +15,6 @@ public:
     void resized() override;
 
 private:
-    AudioProcessor& audioProcessor;
     LookAndFeel lf;
     juce::ComponentBoundsConstrainer constrainer;
     EditorView editorView;

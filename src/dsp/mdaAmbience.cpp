@@ -1,4 +1,4 @@
-#include "mdaAmbience.h"
+#include "dsp/mdaAmbience.h"
 
 MDAAmbience::MDAAmbience(Parameters& params) : _params(params)
 {
@@ -8,10 +8,10 @@ MDAAmbience::MDAAmbience(Parameters& params) : _params(params)
 void MDAAmbience::prepareToPlay([[maybe_unused]] double sampleRate) noexcept
 {
     if (_buf1 == nullptr) {
-        _buf1 = new float[1024];
-        _buf2 = new float[1024];
-        _buf3 = new float[1024];
-        _buf4 = new float[1024];
+        _buf1 = new (std::nothrow) float[1024];
+        _buf2 = new (std::nothrow) float[1024];
+        _buf3 = new (std::nothrow) float[1024];
+        _buf4 = new (std::nothrow) float[1024];
     }
 }
 

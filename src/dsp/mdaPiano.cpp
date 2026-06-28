@@ -1,5 +1,5 @@
-#include "mdaPiano.h"
-#include "mdaPianoData.h"
+#include "dsp/mdaPiano.h"
+#include "dsp/mdaPianoData.h"
 
 MDAPiano::MDAPiano(Parameters& params) : _params(params)
 {
@@ -586,7 +586,7 @@ void MDAPiano::noteOn(int note, int velocity) noexcept
         // between low and high velocities -- but it doesn't raise the floor.
         // When the velocity sensitivity is high (closer to 100%) you can play much
         // louder (or softer). Note that the envelope can start out higher than 1.0.
-        _voices[vl].env = (0.5f + _velocitySensitivity) * std::pow(0.0078f * velocity, _velocitySensitivity);
+        _voices[vl].env = (0.5f + _velocitySensitivity) * std::pow(0.0078f * float(velocity), _velocitySensitivity);
 
         // Calculate the exponential decay factor. The lower the note, the longer
         // the decay is. Note that a typical decay factor is 0.999967. Even a tiny

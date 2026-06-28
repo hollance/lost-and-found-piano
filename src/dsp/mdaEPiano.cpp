@@ -1,13 +1,11 @@
-#include "mdaEPiano.h"
-#include "mdaEPianoData.h"
+#include "dsp/mdaEPiano.h"
+#include "dsp/mdaEPianoData.h"
 
 MDAEPiano::MDAEPiano(Parameters& params) : _params(params)
 {
     // Just in case...
     _sampleRate = 44100.0f;
     _inverseSampleRate = 1.0f / _sampleRate;
-
-    _waves = epianoData;
 
     // Fill it with zeros, just to make sure it's empty.
     memset(_keygroups, 0, sizeof(_keygroups));
@@ -59,6 +57,10 @@ MDAEPiano::MDAEPiano(Parameters& params) : _params(params)
     _keygroups[31].pos = 406046; _keygroups[31].end = 414486; _keygroups[31].loop = 2306;  // ghost
     _keygroups[32].pos = 414487; _keygroups[32].end = 422408; _keygroups[32].loop = 2169;
 
+    // Copy the data since we'll be modifying it.
+    _waves = (short*)malloc(sizeof(epianoData));
+    memcpy(_waves, epianoData, sizeof(epianoData));
+
     // For more seamless looping, it can be a good idea to make the end and start
     // of the loop cross-fade into each other. This code changes the waveforms in
     // the lookup table.
@@ -75,6 +77,11 @@ MDAEPiano::MDAEPiano(Parameters& params) : _params(params)
             xf += dxf;
         }
     }
+}
+
+MDAEPiano::~MDAEPiano()
+{
+    free(_waves);
 }
 
 void MDAEPiano::prepareToPlay(double sampleRate) noexcept
@@ -596,7 +603,7 @@ void MDAEPiano::noteOn(int note, int velocity) noexcept
         // between low and high velocities -- but it doesn't raise the floor.
         // When the velocity sensitivity is high (closer to 100%) you can play much
         // louder (or softer). Note that the envelope can start out higher than 1.0.
-        _voices[vl].env = (3.0f + 2.0f * _velocitySensitivity) * std::pow(0.0078f * velocity, _velocitySensitivity);
+        _voices[vl].env = (3.0f + 2.0f * _velocitySensitivity) * std::pow(0.0078f * float(velocity), _velocitySensitivity);
 
         // Make higher notes (anything over middle C) gradually quieter by giving
         // them a lower starting envelope value.

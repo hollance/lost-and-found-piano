@@ -7,7 +7,7 @@ class RadioButtonAttachment : private juce::Button::Listener
 public:
     RadioButtonAttachment(juce::AudioProcessorValueTreeState& stateToUse,
                           const juce::String& parameterID,
-                          const std::vector<juce::Button*> paramButtons);
+                          const std::vector<juce::Button*>& paramButtons);
 
     ~RadioButtonAttachment() override;
 

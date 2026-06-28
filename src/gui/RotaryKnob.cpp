@@ -1,9 +1,9 @@
-#include "RotaryKnob.h"
+#include "gui/RotaryKnob.h"
 
-RotaryKnob::RotaryKnob(const juce::String& text,
+RotaryKnob::RotaryKnob(juce::String text,
                        juce::AudioProcessorValueTreeState& apvts,
                        const juce::ParameterID& parameterID)
-    : knobName(text), attachment(apvts, parameterID.getParamID(), slider)
+    : knobName(std::move(text)), attachment(apvts, parameterID.getParamID(), slider)
 {
     float pi = juce::MathConstants<float>::pi;
     slider.setRotaryParameters(1.25f * pi, 2.75f * pi, true);
