@@ -20,7 +20,10 @@ private:
     Parameters& _params;
 
     // Delay lines. The maximum length of these is hardcoded to 1024 samples.
-    float *_buf1 = nullptr, *_buf2, *_buf3, *_buf4;
+    float *_buf1 = nullptr;
+    float *_buf2 = nullptr;
+    float *_buf3 = nullptr;
+    float *_buf4 = nullptr;
 
     // Read position in the delay buffers.
     int _pos;
