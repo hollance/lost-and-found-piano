@@ -135,6 +135,15 @@ void EditorView::resized()
 
 void EditorView::parameterValueChanged(int, float)
 {
+    juce::MessageManager::callAsync([safeThis = juce::Component::SafePointer<EditorView> { this }] {
+        if (safeThis) {
+            safeThis->updateInstrument();
+        }
+    });
+}
+
+void EditorView::updateInstrument()
+{
     selectionBar.setBounds(audioProcessor.params.isAcoustic() ? acousticButton.getBounds()
                                                               : electricButton.getBounds());
     selectionBar.setTransform({});

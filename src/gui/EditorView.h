@@ -26,6 +26,7 @@ private:
     void parameterValueChanged(int parameterIndex, float newValue) override;
     void parameterGestureChanged(int, bool) override { }
 
+    void updateInstrument();
     void updateUI();
 
     AudioProcessor& audioProcessor;
