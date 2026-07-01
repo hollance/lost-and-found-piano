@@ -12,7 +12,7 @@ mdaPiano is a sampled acoustic piano, mdaEPiano is a Rhodes electric piano. Both
 
 Download the latest version from the [Releases page](https://github.com/hollance/lost-and-found-piano/releases).
 
-Extract the downloaded ZIP file.
+Extract the downloaded ZIP file. There are subfolders for Mac, Windows, and Linux.
 
 On Mac:
 
@@ -21,11 +21,12 @@ On Mac:
 
 On Windows:
 
-- sorry, the Windows build is not available yet
-
-<!--
 - copy **Lost N' Found Piano.vst3** to the folder **C:\Program Files\Common Files\VST3**
--->
+
+On Linux:
+
+- copy **Lost N' Found Piano.vst3** to the folder **~/.vst3**
+- copy **Lost N' Found Piano.lv2** to the folder **~/.lv2**
 
 In your DAW, look for **Lost N' Found > Piano**. You can insert this plug-in on an instrument track.
 
@@ -39,13 +40,10 @@ Refer to **UserGuide.pdf** for usage instructions.
 - The window size is not remembered when you close the plug-in.
 - The parameters are not smoothed, so changing them when sound is playing will produce zipper noise.
 - These plug-ins were designed for a sample rate of 44.1 kHz. Other sample rates may not work very well.
-- There is currently no Windows version.
 
 ## Building from source code
 
-**Lost N' Found Piano** is written using C++ and JUCE 8.
-
-This project uses CMake. It assumes a global installation of JUCE.
+This project uses CMake and requires JUCE 8 or later.
 
 On macOS:
 
@@ -63,9 +61,21 @@ cmake -B build -G "Visual Studio 17 2022"
 
 Then open **build/LostAndFoundPiano.sln** in Visual Studio and build the VST3 project.
 
+On Linux:
+
+```bash
+cmake -B build -G "Ninja Multi-Config" \
+    -DCMAKE_C_COMPILER=/usr/bin/clang \
+    -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
+    -DCMAKE_CONFIGURATION_TYPES="Release;Debug"
+
+cmake --build build --config Release --target LostAndFoundPiano_VST3
+cmake --build build --config Release --target LostAndFoundPiano_LV2
+```
+
 ## Credits & license
 
-Copyright (c) 2025 M.I. Hollemans
+Copyright (c) 2025-2026 M.I. Hollemans
 
 This program is free software: you can redistribute it and/or modify it under the terms of the [GNU General Public License](https://www.gnu.org/licenses/gpl-3.0.en.html) as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
