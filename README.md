@@ -37,7 +37,6 @@ Refer to **UserGuide.pdf** for usage instructions.
 ## Known limitations
 
 - None of the original factory presets are included yet.
-- The window size is not remembered when you close the plug-in.
 - The parameters are not smoothed, so changing them when sound is playing will produce zipper noise.
 - These plug-ins were designed for a sample rate of 44.1 kHz. Other sample rates may not work very well.
 
