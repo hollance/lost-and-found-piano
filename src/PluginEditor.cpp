@@ -1,22 +1,21 @@
-#include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "PluginProcessor.h"
 
 AudioProcessorEditor::AudioProcessorEditor(AudioProcessor& p)
-    : juce::AudioProcessorEditor(&p), editorView(p)
+    : juce::AudioProcessorEditor(&p), editorView(p), settings(p.settings)
 {
-    setOpaque(true);
     setLookAndFeel(&lf);
 
     editorView.setBounds(0, 0, defaultWidth, defaultHeight);
     addAndMakeVisible(editorView);
 
-    constrainer.setMinimumSize((defaultWidth * 6) / 10, (defaultHeight * 6) / 10);
-    constrainer.setMaximumSize(defaultWidth * 10, defaultHeight * 10);
+    constrainer.setMinimumSize(defaultWidth / 2, defaultHeight / 2);
+    constrainer.setMaximumSize(defaultWidth * 2, defaultHeight * 2);
     constrainer.setFixedAspectRatio(double(defaultWidth) / double(defaultHeight));
     setConstrainer(&constrainer);
 
     setResizable(true, true);
-    setSize(defaultWidth, defaultHeight);
+    updateSize();
 }
 
 AudioProcessorEditor::~AudioProcessorEditor()
@@ -24,13 +23,29 @@ AudioProcessorEditor::~AudioProcessorEditor()
     setLookAndFeel(nullptr);
 }
 
-void AudioProcessorEditor::paint([[maybe_unused]] juce::Graphics& g)
-{
-    // do nothing
-}
-
 void AudioProcessorEditor::resized()
 {
     auto scale = float(getWidth()) / float(defaultWidth);
     editorView.setTransform(juce::AffineTransform::scale(scale));
+    settings.setWindowWidth(getWidth());
+}
+
+void AudioProcessorEditor::visibilityChanged()
+{
+    if (isVisible()) {
+        settings.reload();
+        updateSize();
+    }
+}
+
+void AudioProcessorEditor::updateSize()
+{
+    int width = settings.getWindowWidth();
+    int height = int(width * double(defaultHeight) / double(defaultWidth));
+    setSize(width, height);    
+}
+
+void AudioProcessorEditor::restoreDefaultSize()
+{
+    setSize(defaultWidth, defaultHeight);
 }

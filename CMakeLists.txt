@@ -56,6 +56,7 @@ target_sources(${PROJECT_NAME} PRIVATE
     src/dsp/mdaPiano.h
     src/dsp/mdaPianoData.h
     src/dsp/SharedDefs.h
+
     src/gui/EditorView.cpp
     src/gui/EditorView.h
     src/gui/GroupView.h
@@ -68,12 +69,15 @@ target_sources(${PROJECT_NAME} PRIVATE
     src/gui/RotaryKnob.cpp
     src/gui/RotaryKnob.h
     src/gui/SelectionBar.h
+
     src/Parameters.h
     src/Parameters.cpp
     src/PluginEditor.cpp
     src/PluginEditor.h
     src/PluginProcessor.cpp
     src/PluginProcessor.h
+    src/Settings.h
+    src/Settings.cpp
 )
 
 source_group(Sources src)

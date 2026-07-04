@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Parameters.h"
+#include "Settings.h"
 #include "dsp/mdaAmbience.h"
 #include "dsp/mdaEPiano.h"
 #include "dsp/mdaPiano.h"
@@ -37,6 +38,7 @@ public:
     juce::MidiKeyboardState keyboardState;
 
     Parameters params;
+    Settings settings;
 
 private:
     MDAPiano acousticPiano { params };

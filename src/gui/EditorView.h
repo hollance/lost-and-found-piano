@@ -9,10 +9,6 @@
 #include "gui/SelectionBar.h"
 #include <JuceHeader.h>
 
-// The width is 52 white piano keys times 18 pixels, minus one pixel.
-static constexpr int defaultWidth = 935;
-static constexpr int defaultHeight = 500;
-
 class EditorView : public juce::Component, private juce::AudioParameterChoice::Listener
 {
 public:

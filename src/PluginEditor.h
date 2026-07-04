@@ -11,13 +11,17 @@ public:
     AudioProcessorEditor(AudioProcessor&);
     ~AudioProcessorEditor() override;
 
-    void paint(juce::Graphics&) override;
     void resized() override;
+    void visibilityChanged() override;
 
 private:
+    void updateSize();
+    void restoreDefaultSize();
+
     LookAndFeel lf;
     juce::ComponentBoundsConstrainer constrainer;
     EditorView editorView;
+    Settings& settings;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioProcessorEditor)
 };
