@@ -45,9 +45,8 @@ RotaryKnob::RotaryKnob(juce::String text,
 
     slider.onDragEnd = [this]()
     {
-        startTimer(500.0f);
+        startTimer(500);
     };
-
 }
 
 RotaryKnob::~RotaryKnob()

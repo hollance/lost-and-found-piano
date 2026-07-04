@@ -16,17 +16,17 @@ Extract the downloaded ZIP file. There are subfolders for Mac, Windows, and Linu
 
 On Mac:
 
-- copy **Lost N' Found Piano.component** to the folder **/Library/Audio/Plug-Ins/Components**
-- copy **Lost N' Found Piano.vst3** to the folder **/Library/Audio/Plug-Ins/VST3**
+- copy **Lost N Found Piano.component** to the folder **/Library/Audio/Plug-Ins/Components**
+- copy **Lost N Found Piano.vst3** to the folder **/Library/Audio/Plug-Ins/VST3**
 
 On Windows:
 
-- copy **Lost N' Found Piano.vst3** to the folder **C:\Program Files\Common Files\VST3**
+- copy **Lost N Found Piano.vst3** to the folder **C:\Program Files\Common Files\VST3**
 
 On Linux:
 
-- copy **Lost N' Found Piano.vst3** to the folder **~/.vst3**
-- copy **Lost N' Found Piano.lv2** to the folder **~/.lv2**
+- copy **Lost N Found Piano.vst3** to the folder **~/.vst3**
+- copy **Lost N Found Piano.lv2** to the folder **~/.lv2**
 
 In your DAW, look for **Lost N' Found > Piano**. You can insert this plug-in on an instrument track.
 
@@ -45,7 +45,15 @@ Refer to **UserGuide.pdf** for usage instructions.
 
 This project uses CMake and requires JUCE 8 or later.
 
-On macOS:
+First clone the repo:
+
+```bash
+git clone https://github.com/hollance/lost-and-found-piano
+cd lost-and-found-piano
+git submodule update --init --recursive
+```
+
+Building on macOS:
 
 ```bash
 cmake -B build -G Xcode -D"CMAKE_OSX_ARCHITECTURES=arm64;x86_64"
@@ -53,7 +61,7 @@ cmake -B build -G Xcode -D"CMAKE_OSX_ARCHITECTURES=arm64;x86_64"
 
 Then open **build/LostAndFoundPiano.xcodeproj** in Xcode and build the VST3 and/or AU targets.
 
-On Windows:
+Building on Windows:
 
 ```text
 cmake -B build -G "Visual Studio 17 2022"
@@ -61,7 +69,7 @@ cmake -B build -G "Visual Studio 17 2022"
 
 Then open **build/LostAndFoundPiano.sln** in Visual Studio and build the VST3 project.
 
-On Linux:
+Building on Linux:
 
 ```bash
 cmake -B build -G "Ninja Multi-Config" \

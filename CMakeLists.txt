@@ -40,8 +40,7 @@ juce_add_plugin(${PROJECT_NAME}
     EDITOR_WANTS_KEYBOARD_FOCUS FALSE
     COPY_PLUGIN_AFTER_BUILD TRUE
     FORMATS AU VST3 LV2
-    PRODUCT_NAME "Lost N' Found Piano"
-    VST3_AUTO_MANIFEST FALSE
+    PRODUCT_NAME "Lost N Found Piano"
     LV2URI urn:audiodevblog:lostandfound:Piano
 )
 
