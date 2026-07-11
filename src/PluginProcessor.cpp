@@ -6,7 +6,13 @@ AudioProcessor::AudioProcessor() :
     apvts(*this, nullptr, "Parameters", Parameters::createParameterLayout()),
     params(apvts)
 {
-    // do nothing
+    loadPresetAt(0);
+    apvts.state.addListener(this);
+}
+
+AudioProcessor::~AudioProcessor()
+{
+    apvts.state.removeListener(this);
 }
 
 bool AudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
@@ -65,9 +71,8 @@ void AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBu
     float *out0 = buffer.getWritePointer(0);
     float *out1 = buffer.getWritePointer(1);
 
-    // Apply output gain and a fixed gain of -12 dB as the samples are quite loud.
     for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
-        float gain = params.outputLevelSmoother.getNextValue() * 0.25f;
+        float gain = params.outputLevelSmoother.getNextValue();
         out0[sample] *= gain;
         out1[sample] *= gain;
     }
@@ -77,15 +82,75 @@ void AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBu
 
 void AudioProcessor::getStateInformation(juce::MemoryBlock& destData)
 {
-    copyXmlToBinary(*apvts.copyState().createXml(), destData);
+    auto xml = apvts.copyState().createXml();
+    xml->addChildElement(presetManager.saveToXml());
+    copyXmlToBinary(*xml, destData);
 }
 
 void AudioProcessor::setStateInformation(const void* data, int sizeInBytes)
 {
     std::unique_ptr<juce::XmlElement> xml(getXmlFromBinary(data, sizeInBytes));
     if (xml.get() != nullptr && xml->hasTagName(apvts.state.getType())) {
+        presetManager.loadFromXml(xml.get());
+        xml->deleteAllChildElementsWithTagName("PRESETS");
         apvts.replaceState(juce::ValueTree::fromXml(*xml));
     }
+
+    juce::MessageManager::callAsync([this] { updateUI(); });
+}
+
+void AudioProcessor::loadPresetAt(int index)
+{
+    loadPreset(presetManager.loadPresetAt(index));
+}
+
+void AudioProcessor::prevPreset()
+{
+    loadPreset(presetManager.loadPrevPreset());
+}
+
+void AudioProcessor::nextPreset()
+{
+    loadPreset(presetManager.loadNextPreset());
+}
+
+void AudioProcessor::loadPreset(std::unique_ptr<juce::XmlElement> xml)
+{
+    if (xml == nullptr) {
+        return;
+    }
+
+    apvts.state.removeListener(this);
+
+    if (auto* parametersXml = xml->getChildByName(apvts.state.getType())) {
+        apvts.replaceState(juce::ValueTree::fromXml(*parametersXml));
+    }
+
+    apvts.state.addListener(this);
+}
+
+void AudioProcessor::updateUI()
+{
+    if (auto* editor = dynamic_cast<AudioProcessorEditor*>(getActiveEditor())) {
+        editor->updatePresetNameButton();
+    }
+}
+
+void AudioProcessor::savePreset(juce::File& file)
+{
+    auto xml = std::make_unique<juce::XmlElement>("PRESET");
+    xml->addChildElement(apvts.copyState().createXml().release());
+    presetManager.savePreset(file, std::move(xml));
+}
+
+void AudioProcessor::valueTreePropertyChanged(juce::ValueTree&, const juce::Identifier&)
+{
+    juce::MessageManager::callAsync(
+        [this]
+        {
+            presetManager.makeDirty();
+            updateUI();
+        });
 }
 
 juce::AudioProcessorEditor* AudioProcessor::createEditor()

@@ -4,6 +4,7 @@
 #include "gui/GroupView.h"
 #include "gui/LookAndFeel.h"
 #include "gui/MidiKeyboardComponent.h"
+#include "gui/PresetPicker.h"
 #include "gui/RadioButtonAttachment.h"
 #include "gui/RotaryKnob.h"
 #include "gui/SelectionBar.h"
@@ -18,6 +19,10 @@ public:
     void paint(juce::Graphics&) override;
     void resized() override;
 
+    void mouseDown(const juce::MouseEvent& event) override;
+
+    void updatePresetNameButton();
+
 private:
     void parameterValueChanged(int parameterIndex, float newValue) override;
     void parameterGestureChanged(int, bool) override { }
@@ -25,13 +30,26 @@ private:
     void updateInstrument();
     void updateUI();
 
+    void showPresetPicker();
+    void showSaveDialog();
+
     AudioProcessor& audioProcessor;
+    PresetManager& presetManager;
 
     LookAndFeel lf;
+    PresetsLookAndFeel rightLF { juce::Justification::centredRight };
+    PresetsLookAndFeel centerLF { juce::Justification::centred };
 
     juce::TextButton acousticButton;
     juce::TextButton electricButton;
     SelectionBar selectionBar;
+
+    juce::TextButton prevButton;
+    juce::TextButton nextButton;
+    juce::TextButton saveButton;
+    juce::TextButton presetNameButton;
+
+    PresetPicker presetPicker;
 
     RadioButtonAttachment instrumentAttachment;
 
@@ -112,6 +130,8 @@ private:
         .build();
 
     juce::Animator animator = juce::AnimatorSetBuilder(barAnimator).followedBy(groupAnimator).build();
+
+    std::unique_ptr<juce::FileChooser> fileChooser;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(EditorView)
 };

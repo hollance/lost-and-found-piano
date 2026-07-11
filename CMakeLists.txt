@@ -64,20 +64,25 @@ target_sources(${PROJECT_NAME} PRIVATE
     src/gui/LookAndFeel.h
     src/gui/MidiKeyboardComponent.cpp
     src/gui/MidiKeyboardComponent.h
+    src/gui/PresetPicker.cpp
+    src/gui/PresetPicker.h
     src/gui/RadioButtonAttachment.cpp
     src/gui/RadioButtonAttachment.h
     src/gui/RotaryKnob.cpp
     src/gui/RotaryKnob.h
     src/gui/SelectionBar.h
 
+    src/FactoryPresets.h
     src/Parameters.h
     src/Parameters.cpp
     src/PluginEditor.cpp
     src/PluginEditor.h
     src/PluginProcessor.cpp
     src/PluginProcessor.h
-    src/Settings.h
+    src/Presets.cpp
+    src/Presets.h
     src/Settings.cpp
+    src/Settings.h
 )
 
 source_group(Sources src)

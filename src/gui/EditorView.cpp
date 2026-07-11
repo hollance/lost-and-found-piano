@@ -2,6 +2,8 @@
 
 EditorView::EditorView(AudioProcessor& p) :
     audioProcessor(p),
+    presetManager(p.presetManager),
+    presetPicker(presetManager),
     instrumentAttachment(p.apvts, ParameterID::instrument.getParamID(), { &acousticButton, &electricButton }),
     keyboardComponent(p.keyboardState, MidiKeyboardComponent::horizontalKeyboard)
 {
@@ -16,6 +18,37 @@ EditorView::EditorView(AudioProcessor& p) :
     addAndMakeVisible(electricButton);
 
     addAndMakeVisible(selectionBar);
+
+    presetNameButton.setLookAndFeel(&rightLF);
+    presetNameButton.onClick = [this] { presetPicker.toggleVisibility(); };
+    addAndMakeVisible(presetNameButton);
+
+    prevButton.setLookAndFeel(&centerLF);
+    prevButton.setButtonText("<");
+    prevButton.onClick = [this]
+    {
+        audioProcessor.prevPreset();
+        updatePresetNameButton();
+    };
+
+    nextButton.setLookAndFeel(&centerLF);
+    nextButton.setButtonText(">");
+    nextButton.onClick = [this]
+    {
+        audioProcessor.nextPreset();
+        updatePresetNameButton();
+    };
+
+    saveButton.setLookAndFeel(&centerLF);
+    saveButton.setButtonText("+");
+    saveButton.onClick = [this]
+    {
+        showSaveDialog();
+    };
+
+    addAndMakeVisible(prevButton);
+    addAndMakeVisible(nextButton);
+    addAndMakeVisible(saveButton);
 
     addAndMakeVisible(tuningGroup);
     tuningGroup.addAndMakeVisible(fineTuningKnob);
@@ -54,16 +87,27 @@ EditorView::EditorView(AudioProcessor& p) :
 
     addAndMakeVisible(keyboardComponent);
 
-    updateUI();
-
     animatorUpdater.addAnimator(animator);
-
     audioProcessor.params.instrumentParam->addListener(this);
+
+    presetPicker.onPresetSelected = [this](int presetIndex)
+    {
+        audioProcessor.loadPresetAt(presetIndex);
+        updatePresetNameButton();
+        presetPicker.hide();
+    };
+    addChildComponent(presetPicker);
+
+    addMouseListener(this, true);
+
+    updateUI();
+    updatePresetNameButton();
 }
 
 EditorView::~EditorView()
 {
     audioProcessor.params.instrumentParam->removeListener(this);
+    presetNameButton.setLookAndFeel(nullptr);
 }
 
 void EditorView::paint(juce::Graphics& g)
@@ -94,6 +138,13 @@ void EditorView::resized()
 
     selectionBar.setBounds(acousticButton.getToggleState() ? acousticButton.getBounds()
                                                            : electricButton.getBounds());
+
+    presetNameButton.setBounds(getWidth() - 305, 0, 230, 38);
+    saveButton.setBounds(getWidth() - 30, 9, 20, 20);
+    nextButton.setBounds(saveButton.getX() - 20, 9, 20, 20);
+    prevButton.setBounds(nextButton.getX() - 20, 9, 20, 20);
+
+    presetPicker.setBounds(getWidth() - 225, 40, 225, 376);
 
     tuningGroup.setBounds(40, 65, 270, 145);
     fineTuningKnob.setTopLeftPosition(0, 50);
@@ -133,6 +184,15 @@ void EditorView::resized()
     keyboardComponent.setBounds(0, defaultHeight - 80, defaultWidth + 1, 80);
 }
 
+void EditorView::mouseDown(const juce::MouseEvent& event)
+{
+    if (!presetPicker.isHidden() &&
+        !presetPicker.contains(event.getEventRelativeTo(&presetPicker).getPosition()) &&
+        !presetNameButton.contains(event.getEventRelativeTo(&presetNameButton).getPosition())) {
+        presetPicker.hide();
+    }
+}
+
 void EditorView::parameterValueChanged(int, float)
 {
     juce::MessageManager::callAsync([safeThis = juce::Component::SafePointer<EditorView> { this }] {
@@ -161,4 +221,37 @@ void EditorView::updateUI()
 {
     filterGroup.setVisible(audioProcessor.params.isAcoustic());
     modulationGroup.setVisible(!filterGroup.isVisible());
+}
+
+void EditorView::showSaveDialog()
+{
+    auto dir = getUserPresetsDir();
+    if (!dir.isDirectory()) {
+        auto result = dir.createDirectory();
+        if (result.failed()) {
+            DBG("Unable to create folder: '" << dir.getFullPathName() << "'");
+        }
+    }
+
+    juce::String suggestedName = "New Preset.xml";
+
+    fileChooser = std::make_unique<juce::FileChooser>(
+        "Save User Preset",
+        dir.getChildFile(suggestedName),
+        "*.xml");
+
+    fileChooser->launchAsync(
+        juce::FileBrowserComponent::saveMode | juce::FileBrowserComponent::doNotClearFileNameOnRootChange,
+        [this](const juce::FileChooser& chooser)
+        {
+            juce::File file(chooser.getResult());
+            if (file == juce::File()) { return; }  // cancelled
+            audioProcessor.savePreset(file);
+            updatePresetNameButton();
+        });
+}
+
+void EditorView::updatePresetNameButton()
+{
+    presetNameButton.setButtonText(presetManager.getActivePresetDisplayText());
 }

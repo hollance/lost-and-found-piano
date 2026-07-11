@@ -132,3 +132,86 @@ void LookAndFeel::drawButtonBackground(
 {
     // do nothing
 }
+
+PresetsLookAndFeel::PresetsLookAndFeel(juce::Justification justification_) : justification(justification_)
+{
+    setColour(juce::TextButton::textColourOnId, juce::Colours::white);
+    setColour(juce::TextButton::textColourOffId, Colors::text);
+
+    setColour(juce::ListBox::backgroundColourId, juce::Colours::transparentBlack);
+    setColour(juce::ListBox::outlineColourId, juce::Colours::transparentBlack);
+
+    setColour(juce::ScrollBar::thumbColourId, Colors::listSelected);
+    setColour(juce::ScrollBar::trackColourId, Colors::listBackground);
+    setColour(juce::ScrollBar::backgroundColourId, Colors::listBackground);
+}
+
+void PresetsLookAndFeel::drawButtonText(
+    juce::Graphics& g,
+    juce::TextButton& button,
+    [[maybe_unused]] bool shouldDrawButtonAsHighlighted,
+    [[maybe_unused]] bool shouldDrawButtonAsDown)
+{
+    g.setFont(Fonts::getMonoFont());
+    g.setColour(button.findColour(button.getToggleState() ? juce::TextButton::textColourOnId
+                                                          : juce::TextButton::textColourOffId)
+                       .withMultipliedAlpha(button.isEnabled() ? 1.0f : 0.5f));
+
+    g.drawText(button.getButtonText(), 0, 0, button.getWidth(), button.getHeight(), justification, true);
+}
+
+void PresetsLookAndFeel::drawButtonBackground(
+    [[maybe_unused]] juce::Graphics& g,
+    [[maybe_unused]] juce::Button& button,
+    [[maybe_unused]] const juce::Colour& backgroundColour,
+    [[maybe_unused]] bool shouldDrawButtonAsHighlighted,
+    [[maybe_unused]] bool shouldDrawButtonAsDown)
+{
+    // do nothing
+}
+
+bool PresetsLookAndFeel::areScrollbarButtonsVisible()
+{
+    return false;
+}
+
+void PresetsLookAndFeel::drawScrollbarButton(juce::Graphics&, juce::ScrollBar&, int, int, int, bool, bool, bool)
+{
+    // do nothing
+}
+
+void PresetsLookAndFeel::drawScrollbar(
+    juce::Graphics& g,
+    [[maybe_unused]] juce::ScrollBar& scrollbar,
+    int x,
+    int y,
+    int width,
+    int height,
+    bool isScrollbarVertical,
+    int thumbStartPosition,
+    int thumbSize,
+    [[maybe_unused]] bool isMouseOver,
+    [[maybe_unused]] bool isMouseDown)
+{
+    g.fillAll(Colors::listBackground);
+
+    juce::Rectangle<int> thumbBounds;
+    if (isScrollbarVertical) {
+        thumbBounds = {x, thumbStartPosition, width, thumbSize};
+    } else {
+        thumbBounds = {thumbStartPosition, y, thumbSize, height};
+    }
+
+    g.setColour(Colors::listSelected);
+    g.fillRect(thumbBounds.reduced(2, 2));
+}
+
+int PresetsLookAndFeel::getMinimumScrollbarThumbSize(juce::ScrollBar&)
+{
+    return 10;
+}
+
+int PresetsLookAndFeel::getDefaultScrollbarWidth()
+{
+    return 10;
+}

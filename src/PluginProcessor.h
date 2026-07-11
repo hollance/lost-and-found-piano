@@ -1,16 +1,18 @@
 #pragma once
 
 #include "Parameters.h"
+#include "Presets.h"
 #include "Settings.h"
 #include "dsp/mdaAmbience.h"
 #include "dsp/mdaEPiano.h"
 #include "dsp/mdaPiano.h"
 #include <JuceHeader.h>
 
-class AudioProcessor : public juce::AudioProcessor
+class AudioProcessor : public juce::AudioProcessor, private juce::ValueTree::Listener
 {
 public:
     AudioProcessor();
+    ~AudioProcessor() override;
 
     bool hasEditor() const override { return true; }
     const juce::String getName() const override { return "Piano"; }
@@ -34,13 +36,23 @@ public:
     void setStateInformation(const void* data, int sizeInBytes) override;
     juce::AudioProcessorEditor* createEditor() override;
 
+    void loadPresetAt(int index);
+    void prevPreset();
+    void nextPreset();
+    void loadPreset(std::unique_ptr<juce::XmlElement> xml);
+    void savePreset(juce::File& file);
+
     juce::AudioProcessorValueTreeState apvts;
     juce::MidiKeyboardState keyboardState;
 
     Parameters params;
     Settings settings;
+    PresetManager presetManager;
 
 private:
+    void valueTreePropertyChanged(juce::ValueTree&, const juce::Identifier&) override;
+    void updateUI();
+
     MDAPiano acousticPiano { params };
     MDAEPiano electricPiano { params };
     MDAAmbience reverb { params };

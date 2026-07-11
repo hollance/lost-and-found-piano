@@ -2,7 +2,7 @@
 #include "PluginProcessor.h"
 
 AudioProcessorEditor::AudioProcessorEditor(AudioProcessor& p)
-    : juce::AudioProcessorEditor(&p), editorView(p), settings(p.settings)
+    : juce::AudioProcessorEditor(p), editorView(p), settings(p.settings)
 {
     setLookAndFeel(&lf);
 
@@ -48,4 +48,9 @@ void AudioProcessorEditor::updateSize()
 void AudioProcessorEditor::restoreDefaultSize()
 {
     setSize(defaultWidth, defaultHeight);
+}
+
+void AudioProcessorEditor::updatePresetNameButton()
+{
+    editorView.updatePresetNameButton();
 }

@@ -14,12 +14,15 @@ public:
     void resized() override;
     void visibilityChanged() override;
 
+    void updatePresetNameButton();
+
 private:
     void updateSize();
     void restoreDefaultSize();
 
     LookAndFeel lf;
     juce::ComponentBoundsConstrainer constrainer;
+
     EditorView editorView;
     Settings& settings;
 
