@@ -32,7 +32,7 @@ juce::String PresetListModel::getNameForRow(int rowNumber)
         return {};
     }
 
-    Item item = items[size_t(rowNumber)];
+    auto& item = items[size_t(rowNumber)];
     if (item.category.isNotEmpty()) {
         return item.category.toUpperCase();
     }
@@ -43,7 +43,7 @@ juce::String PresetListModel::getNameForRow(int rowNumber)
 void PresetListModel::listBoxItemClicked(int row, const juce::MouseEvent&)
 {
     if (row != -1) {
-        Item item = items[size_t(row)];
+        auto& item = items[size_t(row)];
         if (item.preset != nullptr) {
             onPresetSelected(item.presetIndex);
         }
@@ -52,7 +52,11 @@ void PresetListModel::listBoxItemClicked(int row, const juce::MouseEvent&)
 
 void PresetListModel::paintListBoxItem(int rowNumber, juce::Graphics& g, int width, int height, bool isSelected)
 {
-    Item item = items[size_t(rowNumber)];
+    if (rowNumber >= int(items.size())) {
+        return;
+    }
+
+    auto& item = items[size_t(rowNumber)];
     bool isCategory = item.category.isNotEmpty();
 
     if (isSelected && !isCategory) {
