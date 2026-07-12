@@ -20,6 +20,9 @@ public:
 private:
     struct Item
     {
+        Item(juce::String cat, Preset* p, int index)
+            : category(std::move(cat)), preset(p), presetIndex(index) {}
+
         juce::String category = "";
         Preset* preset = nullptr;
         int presetIndex = -1;
